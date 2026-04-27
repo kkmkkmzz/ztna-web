@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZTNA (Zero Trust Network Access) 소개</title>
+    <style>
+        /* 기본 스타일 설정 */
+        body { 
+            font-family: 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #f4f7f6; 
+        }
+        
+        /* 헤더 (제목 영역) 스타일 */
+        header { 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            color: #fff; 
+            padding: 3rem 1rem; 
+            text-align: center; 
+        }
+        header h1 { 
+            margin: 0; 
+            font-size: 2.5rem; 
+            letter-spacing: -1px;
+        }
+        header p { 
+            margin-top: 10px; 
+            font-size: 1.2rem; 
+            font-weight: 300;
+            opacity: 0.9; 
+        }
+
+        /* 본문 컨테이너 */
+        .container { 
+            max-width: 800px; 
+            margin: 2rem auto; 
+            padding: 0 20px; 
+        }
+
+        /* 각 섹션(카드) 스타일 */
+        .card { 
+            background: #fff; 
+            border-radius: 12px; 
+            padding: 2rem; 
+            margin-bottom: 2rem; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            transition: transform 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 소제목 스타일 */
+        h2 { 
+            color: #2a5298; 
+            border-bottom: 2px solid #ecf0f1; 
+            padding-bottom: 10px; 
+            margin-top: 0;
+        }
+
+        /* 목록 스타일 */
+        ul { 
+            padding-left: 20px; 
+        }
+        li { 
+            margin-bottom: 12px; 
+        }
+        
+        /* 강조 텍스트 */
+        .highlight { 
+            font-weight: 600; 
+            color: #e74c3c; 
+        }
+        .keyword {
+            background-color: #e8f4f8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #1e3c72;
+            font-weight: bold;
+        }
+
+        /* 푸터 */
+        footer { 
+            text-align: center; 
+            padding: 1.5rem 0; 
+            background: #2c3e50; 
+            color: #7f8c8d;
+            margin-top: 3rem; 
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ZTNA (Zero Trust Network Access)</h1>
+        <p>"아무것도 신뢰하지 말고, 항상 검증하라 (Never Trust, Always Verify)"</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <h2>ZTNA란 무엇인가요?</h2>
+            <p><strong>ZTNA(제로 트러스트 네트워크 액세스)</strong>는 사용자의 위치나 네트워크 경계와 관계없이, 애플리케이션 및 데이터에 접근하려는 모든 사용자와 디바이스를 기본적으로 신뢰하지 않고 <strong>항상 신원을 확인하고 권한을 엄격하게 검증</strong>하는 최신 보안 프레임워크입니다.</p>
+        </div>
+
+        <div class="card">
+            <h2>3대 핵심 원칙</h2>
+            <ul>
+                <li><span class="highlight">명시적 검증 (Verify Explicitly):</span> 사용자의 신원, 위치, 디바이스 상태, 이상 징후 등 가능한 모든 데이터 포인트를 기반으로 항상 인증하고 권한을 부여합니다.</li>
+                <li><span class="highlight">최소 권한 부여 (Use Least Privilege Access):</span> 사용자가 특정 작업을 수행하는 데 필요한 <span class="keyword">최소한의 리소스에만</span> 접근할 수 있도록 JIT(Just-In-Time) 및 JEA(Just-Enough-Access) 정책을 적용합니다.</li>
+                <li><span class="highlight">침해 가정 (Assume Breach):</span> 네트워크가 이미 침해되었다고 가정합니다. 마이크로 세그멘테이션(초미세 분할)을 통해 피해 반경을 최소화하고, 지속적인 모니터링을 수행합니다.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>기존 VPN 대비 주요 장점</h2>
+            <ul>
+                <li><strong>공격 표면(Attack Surface) 최소화:</strong> 네트워크 전체에 대한 접근 권한을 주는 VPN과 달리, ZTNA는 특정 개별 애플리케이션에 대한 접근만 허용하여 측면 이동(Lateral Movement) 공격을 방지합니다.</li>
+                <li><strong>사용자 경험 향상:</strong> 원격 근무자나 클라우드 환경에서도 복잡한 접속 과정 없이 빠르고 안전하게 업무 리소스에 접근할 수 있습니다.</li>
+                <li><strong>완벽한 가시성:</strong> 누가, 언제, 어떤 디바이스로, 어떤 애플리케이션에 접근하는지 중앙에서 완벽하게 모니터링하고 제어할 수 있습니다.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ZTNA Security Overview. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
