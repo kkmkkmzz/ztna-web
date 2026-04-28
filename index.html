@@ -644,6 +644,146 @@
       100% { opacity: .38; transform: translateX(-50%) translateY(6px) scale(.96); }
     }
 
+    /* ── Refined ZTNA architecture animation ── */
+    .visual-shell {
+      aspect-ratio: 1 / .96;
+      transform: none;
+      animation: architectureFloat 7s ease-in-out infinite;
+    }
+    @keyframes architectureFloat {
+      0%, 100% { transform: translateY(0); box-shadow: var(--shadow), 0 0 0 rgba(56,189,248,0); }
+      50% { transform: translateY(-10px); box-shadow: var(--shadow), 0 0 70px rgba(56,189,248,.12); }
+    }
+    .zt-flow {
+      min-height: 390px;
+      isolation: isolate;
+    }
+    .zt-flow::before {
+      content: "Policy Broker";
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 50%;
+      width: 190px;
+      height: 190px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: end center;
+      padding-bottom: 22px;
+      border-radius: 50%;
+      color: rgba(186, 230, 253, .72);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background:
+        radial-gradient(circle at center, rgba(56,189,248,.22) 0 34%, transparent 35%),
+        conic-gradient(from 210deg, rgba(56,189,248,.08), rgba(52,211,153,.28), rgba(139,92,246,.18), rgba(56,189,248,.08));
+      filter: drop-shadow(0 0 34px rgba(56,189,248,.18));
+      opacity: .92;
+    }
+    .zt-flow::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      inset: 32px 18px 34px;
+      border-radius: 30px;
+      border: 1px solid rgba(56,189,248,.10);
+      background:
+        linear-gradient(90deg, transparent 49.8%, rgba(56,189,248,.16) 50%, transparent 50.2%),
+        linear-gradient(transparent 49.8%, rgba(56,189,248,.14) 50%, transparent 50.2%);
+      opacity: .56;
+      pointer-events: none;
+    }
+    .zt-step {
+      z-index: 4;
+      width: 134px;
+      min-height: 104px;
+      border-radius: 18px;
+      background: rgba(7, 11, 26, .82);
+    }
+    .zt-step::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(56,189,248,.36), transparent 42%, rgba(52,211,153,.20));
+      opacity: .36;
+      pointer-events: none;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      padding: 1px;
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+    }
+    .zt-step.request { left: 2px; top: calc(50% - 52px); transform: none; }
+    .zt-step.context { left: calc(50% - 67px); top: 0; transform: none; }
+    .zt-step.app { right: 0; top: 68px; }
+    .zt-step.data { right: 0; bottom: 26px; }
+    .zt-verify {
+      width: 126px;
+      height: 126px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(103,232,249,.34), rgba(7,11,26,.96) 48%, rgba(52,211,153,.18) 100%);
+      animation: brokerPulse 3.6s ease-in-out infinite;
+    }
+    @keyframes brokerPulse {
+      0%, 100% { box-shadow: 0 0 58px rgba(56,189,248,.20), inset 0 0 38px rgba(56,189,248,.14); }
+      50% { box-shadow: 0 0 92px rgba(52,211,153,.28), inset 0 0 48px rgba(52,211,153,.14); }
+    }
+    .flow-arrow,
+    .flow-arrow.out {
+      top: 50%;
+      height: 3px;
+      border-radius: 999px;
+    }
+    .flow-arrow {
+      left: 136px;
+      right: calc(50% + 70px);
+      background: linear-gradient(90deg, rgba(56,189,248,.08), rgba(56,189,248,.95));
+    }
+    .flow-arrow.out {
+      left: calc(50% + 70px);
+      right: 138px;
+      background: linear-gradient(90deg, rgba(52,211,153,.86), rgba(103,232,249,.52));
+    }
+    .flow-packet {
+      width: 12px;
+      height: 12px;
+      offset-path: path("M 70 194 C 150 194, 178 194, 226 194 C 266 194, 288 144, 286 74 C 288 144, 312 194, 374 168 C 418 148, 434 122, 450 112");
+      animation: packetMove 5.4s cubic-bezier(.18,.72,.22,1) infinite;
+    }
+    .flow-packet.two {
+      offset-path: path("M 70 194 C 166 194, 204 194, 244 194 C 292 194, 318 220, 370 252 C 410 276, 430 304, 452 318");
+      animation-delay: 1.8s;
+    }
+    .flow-packet.denied {
+      width: 11px;
+      height: 11px;
+      offset-path: path("M 70 194 C 150 194, 198 194, 238 194 C 230 236, 190 306, 112 332");
+      animation-duration: 4s;
+      animation-delay: .8s;
+    }
+    .deny-lane {
+      left: 22px;
+      right: auto;
+      bottom: 18px;
+      width: 236px;
+      justify-content: flex-start;
+    }
+    .flow-result {
+      right: 0;
+      left: auto;
+      bottom: 166px;
+      transform: none;
+      animation-name: resultFlash;
+    }
+    @keyframes resultFlash {
+      0%, 22% { opacity: .45; transform: translateY(4px) scale(.97); }
+      35%, 78% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: .45; transform: translateY(4px) scale(.97); }
+    }
+
     /* ── Section Typography ── */
     .section-kicker {
       display: inline-flex;
@@ -1122,6 +1262,182 @@
     .lk2 { right: 18%; top: 24%; }
     .lk3 { right: 28%; bottom: 18%; }
 
+    /* ── Refined VPN vs ZTNA diagrams ── */
+    .vpn-map,
+    .ztna-map {
+      min-height: 310px;
+      background:
+        radial-gradient(circle at 24% 50%, rgba(56,189,248,.08), transparent 20%),
+        rgba(2, 6, 23, .42);
+    }
+    .vpn-map::before {
+      left: 44px;
+      right: 34px;
+      top: 50%;
+      width: auto;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(245,158,11,.92), rgba(245,158,11,.68), rgba(244,63,94,.48));
+      animation: vpnTunnelFlow 2.2s linear infinite;
+      background-size: 180px 100%;
+    }
+    .vpn-map::after {
+      content: "flat internal network";
+      position: absolute;
+      right: 28px;
+      bottom: 20px;
+      z-index: 3;
+      color: rgba(254,215,170,.72);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    @keyframes vpnTunnelFlow {
+      from { background-position: 0 0; }
+      to { background-position: 180px 0; }
+    }
+    .vpn-open-zone {
+      right: 20px;
+      top: 48px;
+      bottom: 42px;
+      width: 52%;
+      border-radius: 26px;
+      background:
+        linear-gradient(rgba(245,158,11,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,158,11,.08) 1px, transparent 1px),
+        radial-gradient(circle at 42% 48%, rgba(245,158,11,.18), rgba(244,63,94,.08));
+      background-size: 22px 22px, 22px 22px, auto;
+    }
+    .vpn-open-zone::before {
+      content: "Network open";
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      color: #FED7AA;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .breach-wave {
+      left: 50%;
+      top: 50%;
+      animation-duration: 2.6s;
+    }
+    .threat-dot {
+      width: 10px;
+      height: 10px;
+      animation: lateralMove 4.2s ease-in-out infinite;
+    }
+    .t1 { left: 48%; top: 38%; }
+    .t2 { left: 64%; top: 58%; animation-delay: .75s; }
+    .t3 { left: 74%; top: 35%; animation-delay: 1.45s; }
+    @keyframes lateralMove {
+      0% { opacity: 0; transform: translate(-28px, 0) scale(.65); }
+      18%, 76% { opacity: 1; }
+      50% { transform: translate(24px, -12px) scale(1.2); }
+      100% { opacity: 0; transform: translate(48px, 12px) scale(.75); }
+    }
+    .mini-server {
+      width: 58px;
+      height: 44px;
+      border-color: rgba(245,158,11,.26);
+      box-shadow: inset 0 0 24px rgba(245,158,11,.04);
+    }
+    .s1 { right: 39%; top: 36%; }
+    .s2 { right: 16%; top: 22%; }
+    .s3 { right: 15%; bottom: 24%; }
+    .s4 { right: 38%; bottom: 18%; }
+    .ztna-map::before {
+      background:
+        radial-gradient(circle at 43% 50%, rgba(56, 189, 248, .24), transparent 18%),
+        radial-gradient(circle at 74% 31%, rgba(52, 211, 153, .20), transparent 18%),
+        radial-gradient(circle at 74% 70%, rgba(100, 116, 139, .12), transparent 20%);
+    }
+    .ztna-map::after {
+      content: "private apps hidden";
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      z-index: 3;
+      color: rgba(203,213,225,.62);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .ztna-gate {
+      left: calc(50% - 48px);
+      top: calc(50% - 48px);
+      width: 96px;
+      height: 96px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(103,232,249,.26), rgba(7, 11, 26, .92) 55%),
+        rgba(7, 11, 26, .86);
+    }
+    .ztna-gate span {
+      position: relative;
+      z-index: 2;
+    }
+    .ztna-line {
+      left: 72px;
+      right: 82px;
+      top: 32%;
+      height: 3px;
+      border-radius: 999px;
+      transform: rotate(-2deg);
+    }
+    .ztna-line.resource-line {
+      left: calc(50% + 46px);
+      right: 108px;
+      top: 55%;
+      transform: rotate(13deg);
+    }
+    .ztna-line.block-line {
+      left: 72px;
+      top: 73%;
+      width: calc(50% - 62px);
+      height: 3px;
+      transform: rotate(-5deg);
+    }
+    .ztna-line.block-line::before {
+      right: -10px;
+      top: -12px;
+    }
+    .ztna-user-dot.good { left: 24px; top: calc(32% - 24px); }
+    .ztna-user-dot.bad { left: 24px; top: calc(73% - 24px); }
+    .ztna-app-dot { right: 22px; top: calc(27% - 30px); }
+    .ztna-resource-dot {
+      right: 84px;
+      top: calc(57% - 28px);
+      opacity: .82;
+    }
+    .ztna-data-dot {
+      right: 22px;
+      bottom: 26px;
+      opacity: .62;
+    }
+    .ztna-chip.allow { left: calc(50% + 38px); top: 25%; }
+    .ztna-chip.deny { left: 38%; bottom: 18%; }
+    .ztna-packet {
+      offset-path: path("M 50 100 C 134 100, 178 138, 228 142 C 284 146, 350 88, 432 84");
+      animation-duration: 4.1s;
+    }
+    .ztna-packet.data {
+      offset-path: path("M 50 100 C 134 100, 178 138, 228 142 C 272 158, 304 188, 356 218 C 404 246, 426 268, 438 284");
+      animation-delay: 1.3s;
+    }
+    .ztna-packet.denied {
+      offset-path: path("M 50 226 C 126 222, 174 218, 230 214");
+      animation-duration: 2.8s;
+    }
+    .lock-icon {
+      opacity: .55;
+      background: rgba(15, 23, 42, .72);
+      backdrop-filter: blur(10px);
+    }
+
     /* Comparison table */
     .compare-table {
       margin-top: 18px;
@@ -1246,10 +1562,11 @@
     .future-grid {
       margin-top: 38px;
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 14px;
     }
     .future-card {
+      grid-column: span 3;
       min-height: 210px;
       padding: 20px;
       border-radius: 24px;
@@ -1272,6 +1589,9 @@
       filter: blur(16px);
     }
     .future-card:hover { transform: translateY(-8px); border-color: rgba(56, 189, 248, .35); }
+    .future-card:nth-child(5) { grid-column: 2 / span 3; }
+    .future-card:nth-child(6) { grid-column: 5 / span 3; }
+    .future-card:nth-child(7) { grid-column: 8 / span 3; }
     .future-card b {
       display: block;
       color: var(--cyan-2);
@@ -1369,7 +1689,12 @@
       }
       .hero-visual { min-height: 500px; }
       .visual-shell { width: min(100%, 480px); }
-      .future-grid { grid-template-columns: repeat(3, 1fr); }
+      .future-grid { grid-template-columns: repeat(6, 1fr); }
+      .future-card,
+      .future-card:nth-child(5),
+      .future-card:nth-child(6),
+      .future-card:nth-child(7) { grid-column: span 2; }
+      .future-card:nth-child(7) { grid-column: 3 / span 2; }
       .stage-grid { grid-template-columns: repeat(2, 1fr); }
       .stage-card::after { display: none; }
       .stage-beam { display: none; }
@@ -1386,9 +1711,62 @@
       .concept-grid,
       .comparison-layout,
       .metrics-strip { grid-template-columns: 1fr; }
-      .compare-row { grid-template-columns: 1fr; }
-      .compare-row > div + div { border-left: 0; }
-      .future-grid { grid-template-columns: 1fr 1fr; }
+      .compare-table {
+        border: 0;
+        border-radius: 0;
+        overflow: visible;
+        background: transparent;
+        display: grid;
+        gap: 12px;
+      }
+      .compare-row.head { display: none; }
+      .compare-row {
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid rgba(148, 163, 184, .15);
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(2, 6, 23, .42);
+      }
+      .compare-row > div {
+        border-bottom: 0;
+        padding: 14px;
+      }
+      .compare-row > div + div { border-left: 1px solid rgba(148, 163, 184, .10); }
+      .compare-table .compare-row .label {
+        grid-column: 1 / -1;
+        border-bottom: 1px solid rgba(148, 163, 184, .12);
+        background: rgba(56, 189, 248, .08);
+        color: var(--cyan-2);
+      }
+      .compare-row > div:nth-child(2),
+      .compare-row > div:nth-child(3) {
+        position: relative;
+        padding-top: 40px;
+      }
+      .compare-row > div:nth-child(2)::before,
+      .compare-row > div:nth-child(3)::before {
+        position: absolute;
+        left: 14px;
+        top: 12px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .compare-row > div:nth-child(2)::before {
+        content: "기존 VPN";
+        color: #FDA4AF;
+      }
+      .compare-row > div:nth-child(3)::before {
+        content: "ZTNA";
+        color: var(--mint);
+      }
+      .future-grid { grid-template-columns: repeat(2, 1fr); }
+      .future-card,
+      .future-card:nth-child(5),
+      .future-card:nth-child(6),
+      .future-card:nth-child(7) { grid-column: auto; }
+      .future-card:nth-child(7) { grid-column: 1 / -1; }
       .stage-grid { grid-template-columns: 1fr; padding: 18px; min-height: auto; }
       .flow-stage { min-height: auto; }
       .stage-card { min-height: auto; }
@@ -1400,19 +1778,22 @@
       }
       .visual-shell::after { border-radius: 29px; }
       .access-map { padding: 18px; }
-      .zt-flow { min-height: 318px; }
+      .zt-flow { min-height: 380px; }
       .zt-step { width: 112px; min-height: 96px; padding: 12px 9px; }
       .zt-step .icon { width: 34px; height: 34px; }
       .zt-step strong { font-size: 12px; }
       .zt-step small { font-size: 10px; }
-      .zt-step.context { left: 32%; top: 16px; }
+      .zt-step.request { left: 0; top: calc(50% - 48px); }
+      .zt-step.context { left: calc(50% - 56px); top: 0; }
+      .zt-step.app { right: 0; top: 72px; }
+      .zt-step.data { right: 0; bottom: 26px; }
       .zt-verify { width: 116px; height: 116px; }
       .zt-verify::after { display: none; }
       .zt-verify b { font-size: 16px; }
       .flow-arrow { left: 112px; right: calc(50% + 68px); }
       .flow-arrow.out { left: calc(50% + 68px); right: 112px; }
-      .deny-lane { bottom: 38px; right: 54%; }
-      .flow-result { bottom: 14px; }
+      .deny-lane { bottom: 14px; right: auto; width: 218px; }
+      .flow-result { right: 0; bottom: 152px; }
       footer { flex-direction: column; align-items: flex-start; padding-inline: 16px; }
       .footer-credit { text-align: left; }
     }
@@ -1426,27 +1807,38 @@
       .hero-visual { min-height: 380px; }
       .visual-shell { padding: 12px; }
       .access-map { padding: 14px; }
-      .zt-flow { min-height: 336px; }
-      .zt-step { width: 96px; min-height: 88px; border-radius: 16px; }
-      .zt-step.request { top: 52%; }
-      .zt-step.context { left: 31%; top: 4px; }
-      .zt-step.app { top: 18px; }
-      .zt-step.data { bottom: 38px; }
+      .zt-flow { min-height: 330px; }
+      .zt-flow::before { width: 132px; height: 132px; padding-bottom: 16px; font-size: 9px; }
+      .zt-step { width: 92px; min-height: 84px; border-radius: 16px; padding: 10px 8px; }
+      .zt-step.request { left: 0; top: calc(50% - 42px); }
+      .zt-step.context { left: calc(50% - 46px); top: 0; }
+      .zt-step.app { right: 0; top: 66px; }
+      .zt-step.data { right: 0; bottom: 30px; }
       .zt-verify { width: 98px; height: 98px; }
       .zt-verify::before { inset: -10px; }
       .zt-verify b { font-size: 14px; }
       .zt-verify small { font-size: 8px; }
       .flow-arrow { left: 96px; right: calc(50% + 58px); }
       .flow-arrow.out { left: calc(50% + 58px); right: 96px; }
-      .flow-result { font-size: 10px; white-space: nowrap; }
+      .flow-packet { display: none; }
+      .deny-lane { width: 168px; bottom: 10px; font-size: 9px; }
+      .flow-result { right: 0; bottom: 136px; font-size: 9px; white-space: nowrap; padding: 7px 9px; }
       .compare-panel { min-height: auto; padding: 18px; }
-      .vpn-map, .ztna-map { min-height: 220px; }
-      .ztna-gate { width: 76px; height: 76px; left: 36%; top: calc(50% - 38px); }
-      .ztna-line { left: 48px; right: 72px; }
-      .ztna-app-dot { right: 12px; }
-      .ztna-resource-dot { right: 66px; }
-      .ztna-data-dot { right: 12px; }
+      .vpn-map, .ztna-map { min-height: 260px; }
+      .vpn-open-zone { right: 12px; width: 55%; }
+      .mini-server { width: 46px; height: 36px; }
+      .ztna-gate { width: 76px; height: 76px; left: calc(50% - 38px); top: calc(50% - 38px); }
+      .ztna-line { left: 48px; right: 62px; top: 32%; }
+      .ztna-line.resource-line { left: calc(50% + 35px); right: 68px; top: 56%; }
+      .ztna-line.block-line { left: 48px; width: calc(50% - 40px); top: 73%; }
+      .ztna-app-dot { right: 10px; top: calc(27% - 26px); }
+      .ztna-resource-dot { right: 54px; top: calc(58% - 24px); }
+      .ztna-data-dot { right: 10px; }
+      .ztna-packet { display: none; }
       .future-grid { grid-template-columns: 1fr; }
+      .compare-row { grid-template-columns: 1fr; }
+      .compare-row > div + div { border-left: 0; }
+      .compare-row > div:nth-child(3) { border-top: 1px solid rgba(148, 163, 184, .10); }
       .closing { padding-bottom: 68px; }
     }
 
@@ -1676,7 +2068,7 @@
           <p class="panel-desc">신원, 단말 상태, 위치, 위험도를 요청마다 다시 확인하고, 승인된 앱 외의 내부 리소스는 보이지 않게 숨깁니다.</p>
           <div class="ztna-map" aria-label="ZTNA 접근 구조 다이어그램">
             <div class="map-dot ztna-user-dot good">User</div>
-            <div class="map-dot ztna-user-dot bad">Bad</div>
+            <div class="map-dot ztna-user-dot bad">User</div>
             <div class="ztna-line" aria-hidden="true"></div>
             <div class="ztna-line resource-line" aria-hidden="true"></div>
             <div class="ztna-line block-line" aria-hidden="true"></div>
@@ -1732,7 +2124,7 @@
         <div class="compare-row" role="row">
           <div class="label" role="cell">확장 방향</div>
           <div role="cell">원격접속 중심</div>
-          <div role="cell">SASE, SSE, IAM, EDR 연계</div>
+          <div role="cell">SASE, SSE, IAM, EDR, SIEM, SOAR 연계</div>
         </div>
       </div>
     </section>
@@ -1781,7 +2173,7 @@
         <h2 class="section-title" id="future-heading">ZTNA는 통합 접근 보안 체계로 발전하고 있습니다.</h2>
         <p class="section-lead">
           앞으로의 접근 보안은 사용자가 어디에 있는지가 아니라, 지금 이 요청이 신뢰 가능한지를 판단하는 방향으로 이동합니다.
-          ZTNA는 SASE·SSE·IAM·EDR·CASB와 연계되며 동적 보안 아키텍처로 확장됩니다.
+          ZTNA는 SASE·SSE·IAM·EDR·CASB·SIEM·SOAR와 연계되며, 탐지와 대응까지 이어지는 동적 보안 아키텍처로 확장됩니다.
         </p>
       </div>
       <div class="future-grid">
@@ -1807,6 +2199,16 @@
         </article>
         <article class="future-card reveal delay-4">
           <b>05</b>
+          <h3>SIEM Telemetry Correlation</h3>
+          <p>접근 로그와 인증, 단말, 앱 이벤트를 SIEM으로 모아 위협 흐름을 상관 분석합니다.</p>
+        </article>
+        <article class="future-card reveal delay-4">
+          <b>06</b>
+          <h3>SOAR-driven Response</h3>
+          <p>고위험 접근이 감지되면 세션 차단, MFA 재요구, 권한 회수 같은 대응을 자동화합니다.</p>
+        </article>
+        <article class="future-card reveal delay-4">
+          <b>07</b>
           <h3>App-level Micro Access</h3>
           <p>네트워크 전체가 아닌 특정 앱과 기능 단위로 접근 범위를 세분화합니다.</p>
         </article>
