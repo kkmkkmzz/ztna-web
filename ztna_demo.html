@@ -1,0 +1,1984 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070B1A" />
+  <meta name="description" content="ZTNA 관리자 UI 대시보드." />
+  <title>ZTNA Admin Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070B1A;
+      --bg-2: #0F172A;
+      --card: rgba(15, 23, 42, 0.72);
+      --card-2: rgba(2, 6, 23, 0.78);
+      --line: rgba(148, 163, 184, 0.18);
+      --line-strong: rgba(56, 189, 248, 0.42);
+      --cyan: #38BDF8;
+      --cyan-2: #67E8F9;
+      --violet: #8B5CF6;
+      --mint: #34D399;
+      --amber: #F59E0B;
+      --red: #F43F5E;
+      --text: #F8FAFC;
+      --sub: #CBD5E1;
+      --muted: #64748B;
+      --shadow: 0 24px 90px rgba(0, 0, 0, .36);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --max: 1480px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 4%, rgba(56, 189, 248, .19), transparent 32rem),
+        radial-gradient(circle at 86% 8%, rgba(139, 92, 246, .22), transparent 34rem),
+        radial-gradient(circle at 55% 86%, rgba(52, 211, 153, .11), transparent 38rem),
+        linear-gradient(180deg, #070B1A 0%, #0A1025 48%, #070B1A 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -3;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, .055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, .055) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.92), rgba(0,0,0,.32), rgba(0,0,0,.78));
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(56,189,248,.08), transparent 28%, transparent 72%, rgba(139,92,246,.08)),
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,.035), transparent 22rem);
+    }
+
+    a, button { color: inherit; font: inherit; }
+    a { text-decoration: none; }
+    button { cursor: pointer; }
+    h1, h2, h3, p { margin-top: 0; }
+
+    .orb {
+      position: fixed;
+      width: 42vw;
+      max-width: 640px;
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(44px);
+      opacity: .20;
+      z-index: -1;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .orb.one { right: -18vw; top: 6vh; background: rgba(56, 189, 248, .58); }
+    .orb.two { left: -20vw; bottom: 2vh; background: rgba(139, 92, 246, .48); animation-delay: -5s; }
+    .orb.three { left: 42vw; top: 72vh; width: 30vw; background: rgba(52, 211, 153, .30); animation-delay: -9s; }
+    @keyframes drift {
+      from { transform: translate3d(-2%, 1%, 0) scale(1); }
+      to { transform: translate3d(3%, -4%, 0) scale(1.12); }
+    }
+
+    .app-shell {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 22px;
+      padding: 22px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 22px;
+      align-self: start;
+      min-height: calc(100vh - 44px);
+      padding: 20px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 40% 0%, rgba(56,189,248,.17), transparent 18rem),
+        linear-gradient(180deg, rgba(15, 23, 42, .76), rgba(2, 6, 23, .72));
+      border: 1px solid rgba(148, 163, 184, .16);
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.04);
+      overflow: hidden;
+    }
+    .sidebar::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 140deg, transparent, rgba(56,189,248,.18), transparent 18%, transparent 62%, rgba(139,92,246,.14), transparent 78%);
+      animation: rotateSlow 18s linear infinite;
+      opacity: .35;
+    }
+    @keyframes rotateSlow { to { transform: rotate(360deg); } }
+
+    .brand, .nav-list { position: relative; z-index: 2; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 35% 20%, rgba(103,232,249,.95), transparent 28%),
+        linear-gradient(135deg, rgba(56,189,248,.24), rgba(139,92,246,.28));
+      box-shadow: 0 0 34px rgba(56,189,248,.25), inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+    .brand-mark::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--cyan-2);
+      border-radius: 50%;
+      box-shadow: 0 0 18px rgba(103,232,249,.95);
+    }
+    .brand-text strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: -.025em;
+    }
+    .brand-text span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--sub);
+      text-align: left;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .nav-item:hover, .nav-item.active {
+      transform: translateX(3px);
+      color: var(--text);
+      border-color: rgba(56,189,248,.22);
+      background: rgba(56,189,248,.10);
+    }
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--cyan-2);
+      background: rgba(56,189,248,.09);
+      border: 1px solid rgba(56,189,248,.18);
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(7, 11, 26, .82), rgba(7, 11, 26, .58));
+      border: 1px solid rgba(148,163,184,.13);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 54px rgba(0,0,0,.20);
+    }
+    .page-title {
+      min-width: 0;
+    }
+    .page-title span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cyan-2);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--mint);
+      box-shadow: 0 0 0 0 rgba(52, 211, 153, .65);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(52,211,153,.65); }
+      70% { box-shadow: 0 0 0 11px rgba(52,211,153,0); }
+      100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+    }
+    .page-title h1 {
+      margin: 6px 0 0;
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1.02;
+      letter-spacing: -.06em;
+      font-weight: 900;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .chip, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.16);
+      background: rgba(15,23,42,.62);
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .btn {
+      min-height: 42px;
+      padding: 10px 14px;
+      color: var(--text);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(56,189,248,.42);
+      background: rgba(56,189,248,.12);
+    }
+    .btn.primary {
+      color: #03101f;
+      border-color: rgba(255,255,255,.16);
+      background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(139,92,246,.88));
+      box-shadow: 0 0 50px rgba(56,189,248,.24), 0 18px 54px rgba(0,0,0,.30);
+    }
+
+    .hero-console {
+      position: relative;
+      min-height: auto;
+      padding: 24px;
+      border-radius: 34px;
+      border: 1px solid rgba(148,163,184,.16);
+      background:
+        radial-gradient(circle at 60% 45%, rgba(56,189,248,.16), transparent 24rem),
+        radial-gradient(circle at 82% 36%, rgba(139,92,246,.16), transparent 18rem),
+        linear-gradient(145deg, rgba(15,23,42,.70), rgba(2,6,23,.76));
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.035);
+      overflow: hidden;
+      display: grid;
+      gap: 18px;
+    }
+    .hero-console::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 26px;
+      background-image:
+        linear-gradient(rgba(56,189,248,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at 64% 50%, black 0 44%, transparent 74%);
+      opacity: .78;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(500px, 1.14fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      color: var(--cyan-2);
+      background: rgba(56,189,248,.08);
+      border: 1px solid rgba(56,189,248,.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero-copy h2 {
+      margin: 18px 0 14px;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: .96;
+      letter-spacing: -.07em;
+      font-weight: 900;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #F8FAFC 0%, #BAE6FD 34%, #A78BFA 68%, #67E8F9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-copy p {
+      max-width: 430px;
+      color: var(--sub);
+      font-size: 15px;
+      line-height: 1.82;
+      word-break: keep-all;
+      margin-bottom: 0;
+      text-align: right;
+    }
+    .live-matrix {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .live-tile {
+      min-height: 126px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(2,6,23,.46);
+      border: 1px solid rgba(148,163,184,.13);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .live-tile b {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .live-value {
+      display: flex;
+      align-items: end;
+      gap: 7px;
+      color: var(--text);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.05em;
+      font-weight: 900;
+    }
+    .live-value small {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0;
+      padding-bottom: 3px;
+    }
+    .live-tile span {
+      display: block;
+      margin-top: 8px;
+      color: var(--sub);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .mini-meter {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.82);
+      overflow: hidden;
+      border: 1px solid rgba(148,163,184,.10);
+      margin-top: 12px;
+    }
+    .mini-meter i {
+      display: block;
+      width: var(--w);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--c1), var(--c2));
+      box-shadow: 0 0 18px var(--c2);
+      animation: metricBreath 2.4s ease-in-out infinite alternate;
+    }
+
+    .command-overview {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 220px minmax(420px, 1fr) 220px;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .summary-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .summary-card {
+      min-height: 118px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(2,6,23,.48);
+      border: 1px solid rgba(148,163,184,.13);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .summary-card b {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .summary-card strong {
+      display: flex;
+      align-items: end;
+      gap: 7px;
+      margin-top: 14px;
+      color: var(--text);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+    .summary-card strong small {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0;
+      padding-bottom: 3px;
+    }
+    .summary-card span {
+      color: var(--sub);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .traffic-canvas-card {
+      position: relative;
+      min-height: 386px;
+      padding: 18px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 50% 46%, rgba(56,189,248,.18), transparent 18rem),
+        radial-gradient(circle at 72% 28%, rgba(139,92,246,.15), transparent 14rem),
+        rgba(2,6,23,.48);
+      border: 1px solid rgba(148,163,184,.14);
+      overflow: hidden;
+    }
+    .traffic-canvas-card::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 22px;
+      background-image:
+        linear-gradient(rgba(56,189,248,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.07) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: .54;
+      mask-image: radial-gradient(circle at 50% 50%, black 0 48%, transparent 80%);
+    }
+    .traffic-head {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .traffic-head b {
+      display: block;
+      color: var(--cyan-2);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .traffic-head span {
+      display: block;
+      margin-top: 5px;
+      color: var(--sub);
+      font-size: 12px;
+    }
+    .traffic-head .chip { min-height: 32px; }
+    .traffic-wrap {
+      position: relative;
+      z-index: 2;
+      height: 304px;
+    }
+    .traffic-wrap canvas {
+      width: 100%;
+      height: 100%;
+    }
+    .signal-list {
+      display: grid;
+      gap: 12px;
+    }
+    .signal-card {
+      min-height: 118px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(2,6,23,.48);
+      border: 1px solid rgba(148,163,184,.13);
+      display: grid;
+      align-content: space-between;
+      overflow: hidden;
+    }
+    .signal-card b {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .signal-card b span {
+      color: var(--cyan-2);
+      font-size: 12px;
+    }
+    .signal-card p {
+      margin: 12px 0 0;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .decision-panel {
+      position: relative;
+      min-height: auto;
+      border-radius: 24px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 70% 28%, rgba(56,189,248,.16), transparent 18rem),
+        rgba(2,6,23,.42);
+      border: 1px solid rgba(148,163,184,.12);
+      overflow: hidden;
+    }
+    .decision-panel::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 22px;
+      background-image:
+        linear-gradient(rgba(56,189,248,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: .58;
+      mask-image: radial-gradient(circle at 50% 50%, black 0 42%, transparent 75%);
+    }
+    .decision-head {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .decision-head b {
+      display: block;
+      font-size: 14px;
+      color: var(--cyan-2);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .decision-head span {
+      display: block;
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 12px;
+    }
+    .decision-total {
+      text-align: right;
+      font-size: 38px;
+      line-height: 1;
+      letter-spacing: -.06em;
+      font-weight: 900;
+    }
+    .decision-total small {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .decision-funnel {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .funnel-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-content: space-between;
+      min-height: 96px;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(2,6,23,.46);
+      border: 1px solid rgba(148,163,184,.13);
+    }
+    .funnel-label {
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .funnel-bar {
+      position: relative;
+      height: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(15,23,42,.82);
+      border: 1px solid rgba(148,163,184,.12);
+    }
+    .funnel-bar span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--w);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--c1), var(--c2));
+      box-shadow: 0 0 26px color-mix(in srgb, var(--c2) 45%, transparent);
+      animation: metricBreath 2.4s ease-in-out infinite alternate;
+    }
+    .funnel-bar span::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 68px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent);
+      animation: scanAcross 2.6s linear infinite;
+    }
+    @keyframes metricBreath {
+      from { filter: brightness(.82); }
+      to { filter: brightness(1.18); }
+    }
+    @keyframes scanAcross {
+      from { transform: translateX(-80px); }
+      to { transform: translateX(520px); }
+    }
+    .funnel-value {
+      color: var(--text);
+      font-size: 22px;
+      letter-spacing: -.04em;
+      font-weight: 900;
+      text-align: left;
+    }
+    .trust-map {
+      position: relative;
+      min-height: 372px;
+      border-radius: 28px;
+      background: rgba(2,6,23,.38);
+      border: 1px solid rgba(148,163,184,.12);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .trust-map::before {
+      content: "Policy Decision Point";
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 50%;
+      width: 190px;
+      height: 190px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: end center;
+      padding-bottom: 20px;
+      border-radius: 50%;
+      color: rgba(186,230,253,.70);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background:
+        radial-gradient(circle at center, rgba(56,189,248,.23) 0 34%, transparent 35%),
+        conic-gradient(from 210deg, rgba(56,189,248,.08), rgba(52,211,153,.28), rgba(139,92,246,.18), rgba(56,189,248,.08));
+      filter: drop-shadow(0 0 36px rgba(56,189,248,.18));
+    }
+    .trust-map::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(90deg, transparent 49.8%, rgba(56,189,248,.12) 50%, transparent 50.2%),
+        linear-gradient(transparent 49.8%, rgba(56,189,248,.11) 50%, transparent 50.2%);
+      opacity: .65;
+    }
+    .node {
+      position: absolute;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      min-width: 94px;
+      min-height: 66px;
+      padding: 10px;
+      border-radius: 18px;
+      text-align: center;
+      background: rgba(7,11,26,.84);
+      border: 1px solid rgba(148,163,184,.18);
+      box-shadow: 0 18px 45px rgba(0,0,0,.28), inset 0 0 26px rgba(56,189,248,.04);
+    }
+    .node strong {
+      display: block;
+      font-size: 13px;
+      letter-spacing: -.02em;
+    }
+    .node small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.25;
+    }
+    .node.identity { left: 24px; top: 42px; }
+    .node.device { left: 24px; bottom: 44px; }
+    .node.app { right: 26px; top: 44px; border-color: rgba(52,211,153,.32); }
+    .node.data { right: 26px; bottom: 46px; border-color: rgba(139,92,246,.28); }
+    .node.siem { left: calc(50% - 58px); bottom: 18px; min-width: 116px; border-color: rgba(56,189,248,.25); }
+    .broker {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      top: 50%;
+      width: 126px;
+      height: 126px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      text-align: center;
+      border: 1px solid rgba(56,189,248,.34);
+      background:
+        radial-gradient(circle at 50% 42%, rgba(103,232,249,.28), rgba(7,11,26,.96) 54%),
+        rgba(7,11,26,.88);
+      box-shadow: 0 0 64px rgba(56,189,248,.20), inset 0 0 38px rgba(56,189,248,.14);
+      animation: brokerPulse 3.6s ease-in-out infinite;
+    }
+    .broker::before, .broker::after {
+      content: "";
+      position: absolute;
+      inset: -16px;
+      border-radius: inherit;
+      border: 1px dashed rgba(56,189,248,.34);
+      animation: rotateSlow 8s linear infinite;
+    }
+    .broker::after {
+      inset: -28px;
+      border-color: rgba(52,211,153,.24);
+      animation-duration: 12s;
+      animation-direction: reverse;
+    }
+    .broker b {
+      position: relative;
+      z-index: 2;
+      display: block;
+      font-size: 18px;
+    }
+    .broker span {
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin-top: 4px;
+      color: var(--cyan-2);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    @keyframes brokerPulse {
+      0%, 100% { box-shadow: 0 0 58px rgba(56,189,248,.20), inset 0 0 38px rgba(56,189,248,.14); }
+      50% { box-shadow: 0 0 92px rgba(52,211,153,.28), inset 0 0 48px rgba(52,211,153,.14); }
+    }
+
+    .map-line {
+      position: absolute;
+      z-index: 2;
+      height: 3px;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(56,189,248,.20);
+    }
+    .map-line::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 60px;
+      background: linear-gradient(90deg, transparent, #fff, transparent);
+      animation: lineScan 2.6s linear infinite;
+    }
+    @keyframes lineScan {
+      from { transform: translateX(-80px); }
+      to { transform: translateX(420px); }
+    }
+    .line-id { left: 118px; right: calc(50% + 70px); top: 74px; background: linear-gradient(90deg, rgba(56,189,248,.92), rgba(56,189,248,.20)); transform: rotate(12deg); transform-origin: left; }
+    .line-dev { left: 118px; right: calc(50% + 70px); bottom: 82px; background: linear-gradient(90deg, rgba(56,189,248,.80), rgba(244,63,94,.42)); transform: rotate(-12deg); transform-origin: left; }
+    .line-app { left: calc(50% + 68px); right: 120px; top: 86px; background: linear-gradient(90deg, rgba(52,211,153,.84), rgba(52,211,153,.20)); transform: rotate(-13deg); transform-origin: left; }
+    .line-data { left: calc(50% + 68px); right: 120px; bottom: 86px; background: linear-gradient(90deg, rgba(103,232,249,.68), rgba(139,92,246,.48)); transform: rotate(13deg); transform-origin: left; }
+    .line-siem { left: calc(50% - 2px); width: 3px; height: 78px; bottom: 84px; background: linear-gradient(180deg, rgba(56,189,248,.72), rgba(56,189,248,.10)); }
+    .line-siem::after { width: 100%; height: 42px; animation: verticalScan 2.3s linear infinite; }
+    @keyframes verticalScan {
+      from { transform: translateY(-52px); }
+      to { transform: translateY(92px); }
+    }
+
+    .packet {
+      position: absolute;
+      z-index: 5;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--cyan-2);
+      box-shadow: 0 0 18px rgba(103,232,249,.9), 0 0 38px rgba(56,189,248,.42);
+      offset-path: path("M 72 76 C 170 96, 218 142, 285 186 C 348 144, 426 92, 520 78");
+      animation: packetMove 5s cubic-bezier(.18,.72,.22,1) infinite;
+    }
+    .packet.green {
+      background: var(--mint);
+      box-shadow: 0 0 18px rgba(52,211,153,.86);
+      offset-path: path("M 72 292 C 164 260, 224 222, 285 186 C 356 220, 438 276, 520 292");
+      animation-delay: 1.6s;
+    }
+    .packet.red {
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(244,63,94,.86);
+      offset-path: path("M 72 292 C 164 260, 226 222, 270 194 C 244 244, 194 310, 118 326");
+      animation-duration: 3.6s;
+      animation-delay: .7s;
+    }
+    @keyframes packetMove {
+      0% { offset-distance: 0%; opacity: 0; transform: scale(.72); }
+      12% { opacity: 1; }
+      78% { opacity: 1; transform: scale(1.18); }
+      100% { offset-distance: 100%; opacity: 0; transform: scale(.72); }
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 24px;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(15,23,42,.72), rgba(15,23,42,.45));
+      border: 1px solid rgba(148,163,184,.16);
+      box-shadow: 0 18px 54px rgba(0,0,0,.24);
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 0%), rgba(56,189,248,.18), transparent 32%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .card:hover::before { opacity: 1; }
+    .card-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cyan-2);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .card h3 {
+      margin: 6px 0 0;
+      font-size: 19px;
+      line-height: 1.22;
+      letter-spacing: -.04em;
+    }
+    .card-sub {
+      margin: 8px 0 0;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .kpi {
+      grid-column: span 3;
+      min-height: 160px;
+    }
+    .kpi-value {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -.06em;
+      font-weight: 900;
+      margin: 16px 0 12px;
+    }
+    .kpi-value small {
+      padding-bottom: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    .sparkline {
+      position: relative;
+      z-index: 2;
+      height: 44px;
+      display: flex;
+      align-items: end;
+      gap: 5px;
+    }
+    .sparkline span {
+      flex: 1;
+      min-width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(103,232,249,.92), rgba(56,189,248,.12));
+      box-shadow: 0 0 16px rgba(56,189,248,.18);
+      animation: barRise 1.8s ease-in-out infinite alternate;
+    }
+    .sparkline span:nth-child(2n) { animation-delay: -.4s; }
+    .sparkline span:nth-child(3n) { animation-delay: -.8s; }
+    @keyframes barRise {
+      from { transform: scaleY(.72); opacity: .68; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+
+    .chart-card { grid-column: span 7; min-height: 380px; }
+    .donut-card { grid-column: span 5; min-height: 380px; }
+    .matrix-card { grid-column: span 7; }
+    .feed-card { grid-column: span 5; }
+    .policy-card { grid-column: span 6; }
+    .control-card { grid-column: span 6; }
+    .policy-card,
+    .control-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 250px;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .donut-layout {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+    .legend {
+      display: grid;
+      gap: 12px;
+    }
+    .legend-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      color: var(--sub);
+      font-size: 13px;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 16px currentColor;
+    }
+    .legend-row b {
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .access-matrix {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: 10px;
+    }
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 1.1fr .85fr .85fr .85fr .8fr;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .matrix-cell {
+      min-height: 50px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(2,6,23,.42);
+      border: 1px solid rgba(148,163,184,.12);
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .matrix-row.head .matrix-cell {
+      min-height: auto;
+      color: var(--cyan-2);
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: rgba(56,189,248,.08);
+    }
+    .score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      height: 24px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 1px solid rgba(148,163,184,.16);
+    }
+    .allow { color: #BBF7D0; background: rgba(52,211,153,.12); border-color: rgba(52,211,153,.26); }
+    .stepup { color: #FED7AA; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.30); }
+    .deny { color: #FDA4AF; background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.30); }
+
+    .event-feed {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: 12px;
+    }
+    .event {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(2,6,23,.42);
+      border: 1px solid rgba(148,163,184,.12);
+    }
+    .event-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(56,189,248,.10);
+      border: 1px solid rgba(56,189,248,.18);
+      color: var(--cyan-2);
+    }
+    .event strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    .event span {
+      display: block;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+    .event time {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .policy-flow {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+    .policy-step {
+      position: relative;
+      min-height: 130px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(2,6,23,.44);
+      border: 1px solid rgba(148,163,184,.13);
+      overflow: hidden;
+    }
+    .policy-step::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(56,189,248,.25), rgba(52,211,153,.92));
+      box-shadow: 0 0 18px rgba(52,211,153,.24);
+    }
+    .policy-step b {
+      display: block;
+      color: var(--cyan-2);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .policy-step strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -.025em;
+      margin-bottom: 10px;
+    }
+    .policy-step span {
+      display: block;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .control-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+    .control {
+      min-height: 130px;
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(2,6,23,.44);
+      border: 1px solid rgba(148,163,184,.13);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .control b {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .meter {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.85);
+      overflow: hidden;
+      border: 1px solid rgba(148,163,184,.10);
+      margin-bottom: 10px;
+    }
+    .meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--mint));
+      box-shadow: 0 0 18px rgba(52,211,153,.28);
+    }
+    .control p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .footer-note {
+      padding: 8px 4px 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      word-break: keep-all;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-credit {
+      color: #3d5066;
+      font-size: 11px;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: relative;
+        top: auto;
+        min-height: auto;
+      }
+      .nav-list { grid-template-columns: repeat(4, 1fr); }
+      .hero-console { grid-template-columns: 1fr; }
+      .hero-copy { align-items: flex-start; }
+      .hero-copy p { text-align: left; max-width: 720px; }
+      .live-matrix { grid-template-columns: repeat(2, 1fr); }
+      .decision-funnel { grid-template-columns: repeat(2, 1fr); }
+      .command-overview { grid-template-columns: 1fr; }
+      .summary-stack { grid-template-columns: repeat(3, 1fr); }
+      .signal-list { grid-template-columns: repeat(3, 1fr); }
+      .hero-grid { grid-template-columns: 1fr; }
+      .trust-map { min-height: 400px; }
+    }
+
+    @media (max-width: 920px) {
+      .app-shell { padding: 14px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .top-actions { justify-content: flex-start; }
+      .nav-list { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-grid { grid-template-columns: repeat(6, 1fr); }
+      .kpi { grid-column: span 3; }
+      .chart-card, .donut-card, .matrix-card, .feed-card, .policy-card, .control-card { grid-column: 1 / -1; }
+      .donut-layout { grid-template-columns: 1fr; }
+      .policy-flow { grid-template-columns: repeat(2, 1fr); }
+      .control-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell { padding: 10px; gap: 12px; }
+      .sidebar, .topbar, .hero-console, .card { border-radius: 22px; }
+      .nav-list { grid-template-columns: 1fr; }
+      .nav-item { min-height: 40px; }
+      .hero-console { padding: 16px; }
+      .hero-copy { display: block; }
+      .hero-copy h2 { font-size: 36px; }
+      .summary-stack,
+      .signal-list { grid-template-columns: 1fr; }
+      .traffic-canvas-card { min-height: 340px; padding: 14px; }
+      .traffic-wrap { height: 250px; }
+      .decision-panel { min-height: 330px; padding: 16px; }
+      .decision-head { flex-direction: column; }
+      .decision-total { text-align: left; }
+      .funnel-row { grid-template-columns: 1fr; min-height: 88px; gap: 8px; }
+      .funnel-label { font-size: 11px; }
+      .funnel-value { font-size: 20px; }
+      .live-matrix,
+      .control-grid,
+      .policy-flow { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .kpi { grid-column: 1; }
+      .trust-map { min-height: 360px; }
+      .node {
+        min-width: 76px;
+        min-height: 58px;
+        padding: 8px;
+      }
+      .node strong { font-size: 11px; }
+      .node small { display: none; }
+      .node.identity { left: 10px; top: 38px; }
+      .node.device { left: 10px; bottom: 48px; }
+      .node.app { right: 10px; top: 40px; }
+      .node.data { right: 10px; bottom: 50px; }
+      .node.siem { left: calc(50% - 45px); min-width: 90px; bottom: 12px; }
+      .broker { width: 96px; height: 96px; }
+      .broker b { font-size: 14px; }
+      .broker span { font-size: 8px; }
+      .map-line, .packet { display: none; }
+      .matrix-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+        border: 1px solid rgba(148,163,184,.13);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+      .matrix-row.head { display: none; }
+      .matrix-cell {
+        border: 0;
+        border-radius: 0;
+        border-bottom: 1px solid rgba(148,163,184,.10);
+      }
+      .matrix-cell:last-child { border-bottom: 0; }
+      .event { grid-template-columns: auto 1fr; }
+      .event time { grid-column: 2; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb one" aria-hidden="true"></div>
+  <div class="orb two" aria-hidden="true"></div>
+  <div class="orb three" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="ZTNA navigation">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>ZTNA Console</strong>
+      <span>Admin Console</span>
+        </span>
+      </div>
+
+      <nav class="nav-list" aria-label="관리자 메뉴">
+        <a class="nav-item active inert-link" href="#overview">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-11h6V4h-6v5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+          Overview
+        </a>
+        <a class="nav-item inert-link" href="#identity">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          Identity
+        </a>
+        <a class="nav-item inert-link" href="#device">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/><path d="M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          Device
+        </a>
+        <a class="nav-item inert-link" href="#policy">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" stroke="currentColor" stroke-width="1.8"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Policy
+        </a>
+        <a class="nav-item inert-link" href="#apps">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          Private Apps
+        </a>
+        <a class="nav-item inert-link" href="#analytics">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Analytics
+        </a>
+        <a class="nav-item inert-link" href="#soar">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 14.9-4M20 12a8 8 0 0 1-14.9 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 4v4h-4M5 20v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          SOAR
+        </a>
+        <a class="nav-item inert-link" href="#settings">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.64V21a2 2 0 1 1-4 0v-.09a1.8 1.8 0 0 0-1-1.64 1.8 1.8 0 0 0-2 .36l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.64-1H3a2 2 0 1 1 0-4h.09a1.8 1.8 0 0 0 1.64-1 1.8 1.8 0 0 0-.36-2l-.06-.06A2 2 0 1 1 7.14 3.9l.06.06a1.8 1.8 0 0 0 2 .36h.01A1.8 1.8 0 0 0 10.2 2.7V2a2 2 0 1 1 4 0v.09a1.8 1.8 0 0 0 1 1.64 1.8 1.8 0 0 0 2-.36l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.8 1.8 0 0 0-.36 2 1.8 1.8 0 0 0 1.64 1H21a2 2 0 1 1 0 4h-.09A1.8 1.8 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/></svg></span>
+          Settings
+        </a>
+      </nav>
+
+    </aside>
+
+    <main class="main" id="overview">
+      <header class="topbar">
+        <div class="page-title">
+          <span><i class="pulse-dot" aria-hidden="true"></i> Continuous Verification</span>
+          <h1>Zero Trust Access Command Center</h1>
+        </div>
+        <div class="top-actions">
+          <span class="chip">Tenant: KR-SEC-01</span>
+          <span class="chip">Mode: Read Only</span>
+          <a class="btn primary home-link" href="./index.html">Home</a>
+        </div>
+      </header>
+
+      <section class="hero-console" aria-labelledby="console-heading">
+        <div class="hero-copy">
+          <div>
+            <span class="eyebrow"><i class="pulse-dot" aria-hidden="true"></i> Command Center</span>
+            <h2 id="console-heading"><span class="gradient-text">보안 접근 현황</span><br />Live Command View</h2>
+          </div>
+          <p>
+            사용자, 단말, 앱, 데이터 흐름을 하나의 운영 뷰로 확인합니다.
+          </p>
+        </div>
+
+        <div class="command-overview" aria-label="보안 접근 운영 요약">
+          <div class="summary-stack">
+            <div class="summary-card">
+              <b>활성 사용자</b>
+              <strong>1,284<small>명</small></strong>
+              <span>최근 5분 기준</span>
+            </div>
+            <div class="summary-card">
+              <b>정상 단말</b>
+              <strong>92<small>%</small></strong>
+              <span>Posture passed</span>
+            </div>
+            <div class="summary-card">
+              <b>검증 지연</b>
+              <strong>38<small>ms</small></strong>
+              <span>정책 응답 평균</span>
+            </div>
+          </div>
+
+          <div class="traffic-canvas-card">
+            <div class="traffic-head">
+              <span><b>Access Flow Summary</b><span>사용자와 앱 사이의 보호된 접근 흐름</span></span>
+              <span class="chip">9.8k requests</span>
+            </div>
+            <div class="traffic-wrap">
+              <canvas id="commandFlow" aria-label="접근 흐름 요약 차트"></canvas>
+            </div>
+          </div>
+
+          <div class="signal-list">
+            <div class="signal-card">
+              <b>보호 앱 <span>42</span></b>
+              <p>Private, SaaS, Admin 앱 보호</p>
+            </div>
+            <div class="signal-card">
+              <b>위험 세션 <span>27</span></b>
+              <p>재검증 또는 권한 축소 필요</p>
+            </div>
+            <div class="signal-card">
+              <b>대응 대기 <span>6</span></b>
+              <p>SOAR 큐에서 처리 대기</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid" aria-label="ZTNA 관리자 대시보드">
+        <article class="card kpi">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">접근 판단</span>
+              <h3>허용 세션</h3>
+            </div>
+            <span class="score allow">+12%</span>
+          </div>
+          <div class="kpi-value">8,420<small>today</small></div>
+          <div class="sparkline" aria-hidden="true">
+            <span style="height:38%"></span><span style="height:56%"></span><span style="height:42%"></span><span style="height:72%"></span><span style="height:62%"></span><span style="height:88%"></span><span style="height:74%"></span>
+          </div>
+        </article>
+
+        <article class="card kpi">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">위험 조건</span>
+              <h3>추가 인증</h3>
+            </div>
+            <span class="score stepup">Step-up</span>
+          </div>
+          <div class="kpi-value">316<small>events</small></div>
+          <div class="sparkline" aria-hidden="true">
+            <span style="height:58%"></span><span style="height:42%"></span><span style="height:64%"></span><span style="height:52%"></span><span style="height:78%"></span><span style="height:66%"></span><span style="height:44%"></span>
+          </div>
+        </article>
+
+        <article class="card kpi">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">차단 경로</span>
+              <h3>차단 요청</h3>
+            </div>
+            <span class="score deny">Deny</span>
+          </div>
+          <div class="kpi-value">94<small>high risk</small></div>
+          <div class="sparkline" aria-hidden="true">
+            <span style="height:30%"></span><span style="height:48%"></span><span style="height:80%"></span><span style="height:40%"></span><span style="height:74%"></span><span style="height:36%"></span><span style="height:52%"></span>
+          </div>
+        </article>
+
+        <article class="card kpi">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">단말 상태</span>
+              <h3>정상 단말</h3>
+            </div>
+            <span class="score allow">Healthy</span>
+          </div>
+          <div class="kpi-value">92<small>%</small></div>
+          <div class="sparkline" aria-hidden="true">
+            <span style="height:76%"></span><span style="height:82%"></span><span style="height:74%"></span><span style="height:88%"></span><span style="height:84%"></span><span style="height:92%"></span><span style="height:90%"></span>
+          </div>
+        </article>
+
+        <article class="card chart-card" id="analytics">
+          <div class="card-header">
+            <div>
+          <span class="card-kicker">지속 모니터링</span>
+              <h3>위험 점수 추이</h3>
+              <p class="card-sub">사용자, 단말, 앱, 위치 신호 기반</p>
+            </div>
+            <span class="chip">Last 12h</span>
+          </div>
+          <div class="chart-wrap"><canvas id="riskChart" aria-label="위험 점수 추이 차트"></canvas></div>
+        </article>
+
+        <article class="card donut-card">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">정책 결과</span>
+              <h3>접근 결정 분포</h3>
+              <p class="card-sub">허용, 추가인증, 제한, 차단 비율</p>
+            </div>
+          </div>
+          <div class="donut-layout">
+            <div class="chart-wrap" style="height:210px"><canvas id="decisionDonut" aria-label="정책 결정 분포 도넛 차트"></canvas></div>
+            <div class="legend">
+              <div class="legend-row"><i class="legend-dot" style="background:#34D399;color:#34D399"></i><span>허용</span><b>68%</b></div>
+              <div class="legend-row"><i class="legend-dot" style="background:#38BDF8;color:#38BDF8"></i><span>추가 인증</span><b>18%</b></div>
+              <div class="legend-row"><i class="legend-dot" style="background:#F59E0B;color:#F59E0B"></i><span>제한 접근</span><b>9%</b></div>
+              <div class="legend-row"><i class="legend-dot" style="background:#F43F5E;color:#F43F5E"></i><span>차단 / 격리</span><b>5%</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card matrix-card" id="policy">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">최소 권한 매트릭스</span>
+              <h3>접근 정책 판단</h3>
+              <p class="card-sub">주체, 단말, 리소스, 위험도 기반 판단</p>
+            </div>
+            <button class="btn inert-action" type="button">새로고침</button>
+          </div>
+          <div class="access-matrix">
+            <div class="matrix-row head">
+              <div class="matrix-cell">Subject</div>
+              <div class="matrix-cell">Device</div>
+              <div class="matrix-cell">Resource</div>
+              <div class="matrix-cell">Risk</div>
+              <div class="matrix-cell">Decision</div>
+            </div>
+            <div class="matrix-row">
+              <div class="matrix-cell">Finance Admin</div>
+              <div class="matrix-cell">Managed / EDR OK</div>
+              <div class="matrix-cell">ERP Payroll</div>
+              <div class="matrix-cell">Low</div>
+              <div class="matrix-cell"><span class="score allow">Allow</span></div>
+            </div>
+            <div class="matrix-row">
+              <div class="matrix-cell">Partner Analyst</div>
+              <div class="matrix-cell">BYOD / Patch Late</div>
+              <div class="matrix-cell">BI Portal</div>
+              <div class="matrix-cell">Medium</div>
+              <div class="matrix-cell"><span class="score stepup">MFA</span></div>
+            </div>
+            <div class="matrix-row">
+              <div class="matrix-cell">Unknown Service</div>
+              <div class="matrix-cell">Unmanaged</div>
+              <div class="matrix-cell">Git Admin</div>
+              <div class="matrix-cell">High</div>
+              <div class="matrix-cell"><span class="score deny">Deny</span></div>
+            </div>
+            <div class="matrix-row">
+              <div class="matrix-cell">Developer</div>
+              <div class="matrix-cell">Compliant</div>
+              <div class="matrix-cell">K8s Console</div>
+              <div class="matrix-cell">Elevated</div>
+              <div class="matrix-cell"><span class="score stepup">Justify</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card feed-card" id="soar">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">SIEM / SOAR 피드</span>
+              <h3>자동 대응</h3>
+              <p class="card-sub">로그 상관분석, 플레이북 실행, 대응 추적</p>
+            </div>
+          </div>
+          <div class="event-feed">
+            <div class="event">
+              <span class="event-icon" aria-hidden="true">✓</span>
+              <div><strong>세션 허용</strong><span>MFA 통과, 정상 단말, CRM 허용</span></div>
+              <time>09:42</time>
+            </div>
+            <div class="event">
+              <span class="event-icon" aria-hidden="true">!</span>
+              <div><strong>위험 상관분석</strong><span>신규 위치, 미관리 단말, 민감 앱</span></div>
+              <time>09:37</time>
+            </div>
+            <div class="event">
+              <span class="event-icon" aria-hidden="true">×</span>
+              <div><strong>대응 플레이북</strong><span>세션 차단, 토큰 폐기, 티켓 생성</span></div>
+              <time>09:31</time>
+            </div>
+            <div class="event">
+              <span class="event-icon" aria-hidden="true">↻</span>
+              <div><strong>정책 재계산</strong><span>EDR 변경, 권한 축소, 읽기 전용</span></div>
+              <time>09:26</time>
+            </div>
+          </div>
+        </article>
+
+        <article class="card policy-card">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">정책 결정 흐름</span>
+              <h3>제어 흐름</h3>
+              <p class="card-sub">맥락 평가, 접근 판단, 세션 집행</p>
+            </div>
+          </div>
+          <div class="policy-flow">
+            <div class="policy-step"><b>01</b><strong>식별</strong><span>사용자, 서비스 계정, 단말 확인</span></div>
+            <div class="policy-step"><b>02</b><strong>평가</strong><span>위치, 행위, 단말 상태 평가</span></div>
+            <div class="policy-step"><b>03</b><strong>판단</strong><span>허용, 추가인증, 차단 결정</span></div>
+            <div class="policy-step"><b>04</b><strong>집행</strong><span>앱 단위 경로와 최소 권한 적용</span></div>
+            <div class="policy-step"><b>05</b><strong>감시</strong><span>로그, 이상 징후, 세션 재평가</span></div>
+            <div class="policy-step"><b>06</b><strong>대응</strong><span>MFA 재요구, 토큰 폐기, 권한 회수</span></div>
+          </div>
+        </article>
+
+        <article class="card control-card">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">운영 성숙도</span>
+              <h3>보안 역량</h3>
+              <p class="card-sub">제어 상태, 운영 신호, 개선 우선순위</p>
+            </div>
+          </div>
+          <div class="control-grid">
+            <div class="control">
+              <b>신원 <span>91%</span></b>
+              <div class="meter"><span style="width:91%"></span></div>
+              <p>SSO, MFA, 위험 기반 인증</p>
+            </div>
+            <div class="control">
+              <b>단말 <span>82%</span></b>
+              <div class="meter"><span style="width:82%"></span></div>
+              <p>EDR, 패치 수준, 디스크 암호화</p>
+            </div>
+            <div class="control">
+              <b>데이터 <span>74%</span></b>
+              <div class="meter"><span style="width:74%"></span></div>
+              <p>민감도 태그, DLP 신호, 반출 제어</p>
+            </div>
+            <div class="control">
+              <b>네트워크 <span>88%</span></b>
+              <div class="meter"><span style="width:88%"></span></div>
+              <p>앱 단위 경로, 분리, 노출 최소화</p>
+            </div>
+            <div class="control">
+              <b>가시성 <span>86%</span></b>
+              <div class="meter"><span style="width:86%"></span></div>
+              <p>접근 로그, 인증 이벤트, 단말 이벤트</p>
+            </div>
+            <div class="control">
+              <b>자동화 <span>69%</span></b>
+              <div class="meter"><span style="width:69%"></span></div>
+              <p>차단, MFA 재요구, 권한 회수</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <p class="footer-note">
+        <span>This static console view does not perform authentication, policy changes, network calls, or administrative actions.</span>
+        <span class="footer-credit">Made by Kwang-Mo Kim</span>
+      </p>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      document.querySelectorAll('a, button').forEach((el) => {
+        el.addEventListener('click', (event) => {
+          if (el.classList.contains('home-link')) return;
+          event.preventDefault();
+          document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+          if (el.classList.contains('nav-item')) el.classList.add('active');
+        });
+      });
+
+      document.querySelectorAll('.card').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+          card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+        });
+      });
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function setupCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(rect.width * dpr);
+        canvas.height = Math.floor(rect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { ctx, width: rect.width, height: rect.height };
+      }
+
+      function drawRiskChart(frame = 0) {
+        const canvas = document.getElementById('riskChart');
+        if (!canvas) return;
+        const { ctx, width, height } = setupCanvas(canvas);
+        const pad = 24;
+        const points = [31, 38, 34, 46, 43, 58, 52, 63, 59, 71, 66, 78];
+        const allow = [22, 24, 26, 28, 30, 34, 35, 36, 38, 40, 42, 44];
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = 'rgba(148,163,184,.10)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 5; i++) {
+          const y = pad + (height - pad * 2) * (i / 4);
+          ctx.beginPath();
+          ctx.moveTo(pad, y);
+          ctx.lineTo(width - pad, y);
+          ctx.stroke();
+        }
+
+        function pathFor(data) {
+          const max = 90;
+          const min = 10;
+          const step = (width - pad * 2) / (data.length - 1);
+          const path = new Path2D();
+          data.forEach((value, index) => {
+            const x = pad + step * index;
+            const y = height - pad - ((value - min) / (max - min)) * (height - pad * 2);
+            if (index === 0) path.moveTo(x, y);
+            else path.lineTo(x, y);
+          });
+          return path;
+        }
+
+        const riskPath = pathFor(points.map((v, i) => v + Math.sin(frame / 24 + i) * 2));
+        const allowPath = pathFor(allow.map((v, i) => v + Math.cos(frame / 28 + i) * 1.2));
+
+        ctx.strokeStyle = 'rgba(52,211,153,.82)';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(52,211,153,.35)';
+        ctx.shadowBlur = 16;
+        ctx.stroke(allowPath);
+
+        ctx.strokeStyle = 'rgba(244,63,94,.86)';
+        ctx.shadowColor = 'rgba(244,63,94,.34)';
+        ctx.shadowBlur = 18;
+        ctx.stroke(riskPath);
+        ctx.shadowBlur = 0;
+
+        const gradient = ctx.createLinearGradient(0, pad, 0, height - pad);
+        gradient.addColorStop(0, 'rgba(244,63,94,.24)');
+        gradient.addColorStop(1, 'rgba(244,63,94,0)');
+        ctx.fillStyle = gradient;
+        const area = new Path2D(riskPath);
+        area.lineTo(width - pad, height - pad);
+        area.lineTo(pad, height - pad);
+        area.closePath();
+        ctx.fill(area);
+
+        ctx.fillStyle = 'rgba(203,213,225,.70)';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Risk score', pad, 16);
+        ctx.fillStyle = 'rgba(103,232,249,.72)';
+        ctx.fillText('Live telemetry', width - 126, 16);
+      }
+
+      function drawCommandFlow(frame = 0) {
+        const canvas = document.getElementById('commandFlow');
+        if (!canvas) return;
+        const { ctx, width, height } = setupCanvas(canvas);
+        ctx.clearRect(0, 0, width, height);
+
+        const sources = [
+          { x: width * .13, y: height * .24, r: 30, label: 'Users', sub: '1.2k', color: '#38BDF8' },
+          { x: width * .13, y: height * .50, r: 28, label: 'Devices', sub: '92%', color: '#34D399' },
+          { x: width * .13, y: height * .76, r: 26, label: 'Partners', sub: '84', color: '#8B5CF6' }
+        ];
+        const center = { x: width * .50, y: height * .50, r: 54, label: 'Policy', sub: 'VERIFY' };
+        const targets = [
+          { x: width * .86, y: height * .26, r: 30, label: 'Private', sub: '24 apps', color: '#34D399' },
+          { x: width * .86, y: height * .52, r: 28, label: 'SaaS', sub: '18 apps', color: '#67E8F9' },
+          { x: width * .86, y: height * .76, r: 25, label: 'Blocked', sub: '94', color: '#F43F5E' }
+        ];
+
+        function line(a, b, color, weight, delay) {
+          const pulse = .5 + Math.sin(frame / 28 + delay) * .5;
+          ctx.lineWidth = weight + pulse * 2.2;
+          ctx.strokeStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.moveTo(a.x + a.r, a.y);
+          ctx.bezierCurveTo(width * .32, a.y, width * .36, b.y, b.x - b.r, b.y);
+          ctx.stroke();
+
+          const t = ((frame / 120 + delay) % 1);
+          const x = cubic(a.x + a.r, width * .32, width * .36, b.x - b.r, t);
+          const y = cubic(a.y, a.y, b.y, b.y, t);
+          ctx.shadowBlur = 22;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        function cubic(a, b, c, d, t) {
+          return Math.pow(1 - t, 3) * a + 3 * Math.pow(1 - t, 2) * t * b + 3 * (1 - t) * t * t * c + t * t * t * d;
+        }
+
+        sources.forEach((source, i) => line(source, center, `rgba(${i === 1 ? '52,211,153' : i === 2 ? '139,92,246' : '56,189,248'},.50)`, 3 + i, i * .19));
+        targets.forEach((target, i) => line(center, target, `rgba(${i === 0 ? '52,211,153' : i === 1 ? '103,232,249' : '244,63,94'},.58)`, i === 2 ? 2.4 : 4.4, .33 + i * .17));
+
+        function node(n, isCenter = false) {
+          const grd = ctx.createRadialGradient(n.x, n.y, 4, n.x, n.y, n.r + 18);
+          grd.addColorStop(0, isCenter ? 'rgba(103,232,249,.38)' : `${hexToRgba(n.color, .28)}`);
+          grd.addColorStop(1, 'rgba(7,11,26,.88)');
+          ctx.fillStyle = grd;
+          ctx.strokeStyle = isCenter ? 'rgba(103,232,249,.56)' : hexToRgba(n.color, .46);
+          ctx.lineWidth = 1.2;
+          ctx.shadowColor = isCenter ? '#67E8F9' : n.color;
+          ctx.shadowBlur = isCenter ? 30 : 18;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          if (isCenter) {
+            ctx.strokeStyle = 'rgba(103,232,249,.32)';
+            ctx.setLineDash([5, 6]);
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r + 14 + Math.sin(frame / 32) * 3, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#F8FAFC';
+          ctx.font = `800 ${isCenter ? 15 : 12}px Inter, sans-serif`;
+          ctx.fillText(n.label, n.x, n.y - 2);
+          ctx.fillStyle = isCenter ? '#67E8F9' : 'rgba(203,213,225,.78)';
+          ctx.font = '800 10px Inter, sans-serif';
+          ctx.fillText(n.sub, n.x, n.y + 14);
+        }
+
+        function hexToRgba(hex, alpha) {
+          const value = hex.replace('#', '');
+          const r = parseInt(value.slice(0, 2), 16);
+          const g = parseInt(value.slice(2, 4), 16);
+          const b = parseInt(value.slice(4, 6), 16);
+          return `rgba(${r},${g},${b},${alpha})`;
+        }
+
+        sources.forEach((n) => node(n));
+        targets.forEach((n) => node(n));
+        node(center, true);
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(203,213,225,.68)';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillText('source', 18, height - 18);
+        ctx.textAlign = 'center';
+        ctx.fillText('policy decision point', width / 2, height - 18);
+        ctx.textAlign = 'right';
+        ctx.fillText('applications / blocked', width - 18, height - 18);
+      }
+
+      function drawDonut(frame = 0) {
+        const canvas = document.getElementById('decisionDonut');
+        if (!canvas) return;
+        const { ctx, width, height } = setupCanvas(canvas);
+        const cx = width / 2;
+        const cy = height / 2;
+        const radius = Math.min(width, height) * .36;
+        const values = [68, 18, 9, 5];
+        const colors = ['#34D399', '#38BDF8', '#F59E0B', '#F43F5E'];
+        let start = -Math.PI / 2 + frame * .002;
+
+        ctx.clearRect(0, 0, width, height);
+        values.forEach((value, index) => {
+          const angle = (Math.PI * 2) * value / 100;
+          ctx.beginPath();
+          ctx.arc(cx, cy, radius, start, start + angle - .035);
+          ctx.lineWidth = 24;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = colors[index];
+          ctx.shadowColor = colors[index];
+          ctx.shadowBlur = 16;
+          ctx.stroke();
+          start += angle;
+        });
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#F8FAFC';
+        ctx.font = '900 32px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('86%', cx, cy - 4);
+        ctx.fillStyle = 'rgba(203,213,225,.78)';
+        ctx.font = '800 11px Inter, sans-serif';
+        ctx.fillText('VERIFIED', cx, cy + 20);
+      }
+
+      let frame = 0;
+      function animate() {
+        frame++;
+        drawCommandFlow(frame);
+        drawRiskChart(frame);
+        drawDonut(frame);
+        if (!reducedMotion) requestAnimationFrame(animate);
+      }
+      animate();
+      window.addEventListener('resize', () => {
+        drawCommandFlow(frame);
+        drawRiskChart(frame);
+        drawDonut(frame);
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
