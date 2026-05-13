@@ -210,6 +210,65 @@
     }
     .nav-cta:hover { background: rgba(56, 189, 248, .16); border-color: rgba(56,189,248,.50); }
 
+    .contact-alert {
+      max-width: var(--max);
+      margin: 10px auto -34px;
+      padding: 0 22px;
+      position: relative;
+      z-index: 19;
+    }
+
+    .contact-alert[hidden] {
+      display: none;
+    }
+
+    .contact-alert-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 50px;
+      padding: 12px 14px 12px 18px;
+      border: 1px solid rgba(56, 189, 248, .24);
+      border-radius: 14px;
+      background: rgba(15, 23, 42, .78);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, .20), inset 0 0 0 1px rgba(255,255,255,.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: var(--sub);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .contact-alert a {
+      color: var(--cyan-2);
+      font-weight: 800;
+    }
+
+    .contact-alert-close {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(148, 163, 184, .12);
+      color: var(--text);
+      font: inherit;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .contact-alert-close:hover,
+    .contact-alert-close:focus-visible {
+      background: rgba(56, 189, 248, .20);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
     main { position: relative; z-index: 1; }
 
     .section {
@@ -1794,12 +1853,15 @@
       .flow-arrow.out { left: calc(50% + 68px); right: 112px; }
       .deny-lane { bottom: 14px; right: auto; width: 218px; }
       .flow-result { right: 0; bottom: 152px; }
+      .contact-alert { padding-inline: 16px; }
       footer { flex-direction: column; align-items: flex-start; padding-inline: 16px; }
       .footer-credit { text-align: left; }
     }
 
     @media (max-width: 540px) {
       .nav-cta { display: none; }
+      .contact-alert { margin-top: 8px; margin-bottom: -22px; }
+      .contact-alert-inner { align-items: flex-start; padding: 12px; }
       .section { padding-top: 58px; padding-bottom: 58px; }
       h1 { font-size: clamp(48px, 19vw, 78px); }
       .headline-sub { font-size: 30px; }
@@ -1880,6 +1942,13 @@
       </a>
     </nav>
   </header>
+
+  <div class="contact-alert" role="status" aria-live="polite">
+    <div class="contact-alert-inner">
+      <span>문의 : <a href="mailto:admin@ztna.co.kr">admin@ztna.co.kr</a></span>
+      <button class="contact-alert-close" type="button" aria-label="문의 알림 닫기">&times;</button>
+    </div>
+  </div>
 
   <main id="main">
 
@@ -2243,6 +2312,28 @@
     (() => {
       'use strict';
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const contactAlert = document.querySelector('.contact-alert');
+      const contactAlertClose = document.querySelector('.contact-alert-close');
+      contactAlertClose?.addEventListener('click', () => {
+        contactAlert?.setAttribute('hidden', '');
+      });
+
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        const blockedShortcut =
+          e.key === 'F12' ||
+          (e.ctrlKey && key === 'u') ||
+          (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(key));
+
+        if (blockedShortcut) {
+          e.preventDefault();
+        }
+      });
 
       /* ── Scroll reveal ── */
       const reveals = document.querySelectorAll('.reveal');
