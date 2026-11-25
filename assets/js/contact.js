@@ -32,4 +32,10 @@
       }
     });
   });
+
+  // 모바일에서 가로로 넘치는 메뉴: 현재 페이지 메뉴가 보이도록 이동
+  var cur = document.querySelector('.nav [aria-current="page"]');
+  if (cur && cur.parentNode.scrollWidth > cur.parentNode.clientWidth) {
+    cur.parentNode.scrollLeft = Math.max(0, cur.offsetLeft - cur.parentNode.offsetLeft - 8);
+  }
 })();

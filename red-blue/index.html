@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070B1A">
+<title>레드팀·블루팀·퍼플팀이란? 공격형·방어형 보안 쉽게 이해하기 | ztna.co.kr</title>
+<meta name="description" content="레드팀(공격), 블루팀(방어), 퍼플팀(협업)의 뜻과 차이, 공격으로 검증하고 방어로 개선하는 보안 흐름을 쉽게 설명하고 연습 경기 데모를 제공합니다.">
+<link rel="canonical" href="https://ztna.co.kr/red-blue/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="레드팀·블루팀·퍼플팀이란? 공격형·방어형 보안 쉽게 이해하기 | ztna.co.kr">
+<meta property="og:description" content="레드팀(공격), 블루팀(방어), 퍼플팀(협업)의 뜻과 차이, 공격으로 검증하고 방어로 개선하는 보안 흐름을 쉽게 설명하고 연습 경기 데모를 제공합니다.">
+<meta property="og:url" content="https://ztna.co.kr/red-blue/">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070B1A'/%3E%3Cpath d='M9 10h14L9 22h14' stroke='%2338BDF8' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<header class="site-header">
+  <div class="wrap">
+    <div class="header-row">
+      <a class="brand" href="/">ztna<span>.co.kr</span></a>
+      <nav class="nav" aria-label="주요 메뉴" id="nav-desktop"><a href="/">홈</a><a href="/ztna/">ZTNA</a><a href="/sse/">SSE</a><a href="/soar/">SOAR</a><a href="/ai-soc/">AI SOC</a><a href="/red-blue/" aria-current="page">레드·블루팀</a></nav>
+      <p class="contact">
+        <span class="contact-label">문의</span>
+        <a class="contact-mail" data-mail href="/#contact" aria-label="문의 이메일">admin [at] ztna.co.kr</a>
+        <button class="copy-btn" type="button" data-copy-mail hidden aria-label="문의 이메일 주소 복사">복사</button>
+      </p>
+    </div>
+  </div>
+</header>
+<main id="main">
+<section class="section hero"><div class="wrap">
+  <span class="eyebrow">Red Team · Blue Team · Purple Team</span>
+  <h1>공격으로 검증하고, 방어로 개선한다</h1>
+  <p class="lead">레드팀은 허락받은 공격자로서 회사를 직접 공격해 보고, 블루팀은 그 공격을 알아채고 막습니다. 두 팀이 결과를 함께 놓고 방어를 고치는 것이 퍼플팀입니다.</p>
+  <div class="card" style="margin-top:18px"><span class="tag">비유로 이해하기</span><p>축구 연습 경기와 비슷합니다. 레드팀은 상대 공격수 역할을 맡아 우리 수비의 빈틈을 파고들고, 블루팀은 실전처럼 막아 봅니다. 경기가 끝나면 두 팀이 영상을 같이 보며 어디서 뚫렸는지 짚고 수비 전술을 고칩니다. 이 복기 과정이 퍼플팀입니다.</p></div>
+</div></section>
+<section class="section"><div class="wrap">
+  <h2>어떤 문제를 해결하나요</h2>
+  <div class="grid three"><div class="card"><h3>막는다고 믿었는데</h3><p>방어 장비를 갖췄어도 실제 공격을 알아채는지는 시험해 보기 전까지 모릅니다.</p></div><div class="card"><h3>한 번 점검의 한계</h3><p>1년에 한 번 하는 모의해킹은 그사이 바뀐 시스템과 새 공격 방법을 따라가지 못합니다.</p></div><div class="card"><h3>공격과 방어의 단절</h3><p>공격 보고서가 나와도 방어 담당자에게 전달되지 않으면 같은 구멍이 남습니다.</p></div></div>
+</div></section>
+<section class="section"><div class="wrap">
+  <h2>어떻게 동작하나요</h2>
+  <ol class="steps"><li><strong>목표와 규칙 정하기</strong>무엇을 지킬지, 어디까지 공격해도 되는지 경영진 승인 아래 미리 정합니다.</li><li><strong>레드팀 공격</strong>실제 공격자가 쓰는 방법을 흉내 내 정해진 목표까지 침투를 시도합니다.</li><li><strong>블루팀 탐지와 대응</strong>블루팀은 평소처럼 운영하며 무엇을 알아채고 막았는지 기록합니다.</li><li><strong>퍼플팀 복기</strong>두 팀이 공격 경로와 탐지 기록을 나란히 놓고 놓친 지점을 찾습니다.</li><li><strong>고치고 다시 시험</strong>탐지 규칙과 설정을 고친 뒤, 같은 공격으로 다시 시험해 고쳐졌는지 확인합니다.</li></ol>
+</div></section>
+<section class="section"><div class="wrap">
+  <h2>한눈에 비교</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th scope="col">구분</th><th scope="col">레드팀</th><th scope="col">블루팀</th><th scope="col">퍼플팀</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">역할</th><td>공격자처럼 침투를 시도</td><td>탐지하고 막고 복구</td><td>두 팀을 이어 개선을 만듦</td></tr>
+      <tr><th scope="row">질문</th><td>"어디로 뚫리나?"</td><td>"무엇을 알아채고 막았나?"</td><td>"놓친 것을 어떻게 고치나?"</td></tr>
+      <tr><th scope="row">결과물</th><td>뚫린 경로와 방법 보고서</td><td>탐지 기록, 대응 절차</td><td>새 탐지 규칙, 재시험 결과</td></tr>
+      <tr><th scope="row">주기</th><td>정해진 기간의 훈련</td><td>매일 상시 운영</td><td>훈련 직후와 주기적 반복</td></tr>
+    </tbody>
+  </table></div>
+</div></section><section class="section" id="demo"><div class="wrap">
+  <h2>직접 해 보기: 레드팀 vs 블루팀 연습 경기</h2>
+  <p>여러분이 블루팀입니다. 켜 둘 방어를 고르고 "레드팀 공격 시작"을 누르면, 가상의 공격이 4단계로 진행되며 어디서 막히는지 보여 줍니다.</p>
+  <div class="demo">
+    <span class="sim-badge">시뮬레이션: 가상의 공격 시나리오이며, 실제 공격 기법이나 제품의 탐지 성능을 나타내지 않습니다.</span>
+    <form id="rb-demo" onsubmit="return false">
+      <fieldset><legend>블루팀이 켜 둘 방어</legend><div class="seg">
+        <label><input type="checkbox" name="def" value="mfa"><span>다중 인증(MFA)</span></label><label><input type="checkbox" name="def" value="edr" checked><span>단말 탐지(EDR)</span></label><label><input type="checkbox" name="def" value="net"><span>네트워크·계정 이상 탐지</span></label><label><input type="checkbox" name="def" value="dlp"><span>정보 유출 방지(DLP)</span></label>
+      </div></fieldset>
+    </form>
+    <div class="btn-row" style="margin:0 0 16px"><button class="btn primary" type="button" id="rb-run">레드팀 공격 시작</button></div>
+    <div id="rb-out" tabindex="-1" aria-live="polite"></div>
+    <noscript><p class="note">이 데모는 자바스크립트가 필요합니다.</p></noscript>
+  </div>
+  <p class="note">처음 상태는 단말 탐지만 켠 상태입니다. 훔친 계정으로 정상 기능을 써서 움직이는 단계는 새 프로그램 실행이 없어 단말 탐지만으로는 놓치기 쉽다는 점을 단순화해 보여 줍니다. 앞의 CISA 보고서도 단말 탐지 의존과 계정 관리 부족을 지적했습니다.</p>
+</div></section><section class="section"><div class="wrap">
+  <h2>왜 지금 "공격과 방어를 함께"인가요</h2>
+  <p>막는 장비를 사 두는 것만으로는 실제로 막히는지 알 수 없습니다. 그래서 공격자처럼 직접 시험하고, 그 결과로 방어를 고치는 일을 한 번이 아니라 계속 반복하는 쪽으로 업계의 관심이 옮겨 가고 있습니다.</p>
+  <div class="grid two">
+    <div class="card"><span class="tag">미국 사이버보안·인프라보안청(CISA), 2024</span><h3>방어 장비가 있어도 공격을 못 알아챘다</h3><p>CISA 레드팀이 한 핵심 기반시설 기관을 점검한 결과, 이 기관은 단말 탐지(EDR)에 지나치게 의존하고 네트워크 단계의 보호가 부족했으며, 계정 관리 문제로 방어 담당자가 레드팀의 활동을 탐지하지 못했다고 보고했습니다.</p><p class="note"><a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-326a" rel="noopener">CISA AA24-326A (2024.11)</a></p></div>
+    <div class="card"><span class="tag">Gartner, 2026</span><h3>한 번의 모의해킹에서 "계속하는 공격 테스트"로</h3><p>Gartner는 2026년 3월 보고서 "How to Implement a Continuous Offensive Security Testing Program"에서 공격 관점의 보안 테스트를 일회성이 아닌 상시 프로그램으로 운영하는 방법을 다뤘습니다.</p><p class="note">보고서 원문은 유료입니다. 제목과 발행일은 공개 소개 페이지 기준입니다: <a href="https://www.hackerone.com/report/gartner-continuous-offensive-security-testing-program" rel="noopener">HackerOne 소개 페이지</a></p></div>
+  </div>
+  <p class="note">이 페이지에는 위 두 자료 말고 "몇 퍼센트의 기업이 도입했다" 같은 통계는 넣지 않았습니다. 원 출처를 직접 확인한 수치가 아직 없기 때문입니다.</p>
+</div></section>
+<section class="section"><div class="wrap">
+  <h2>핵심 기능</h2>
+  <div class="grid two"><div class="card"><h3>레드팀: 공격자 관점</h3><p>피싱, 계정 탈취, 내부 이동처럼 실제 공격 흐름을 처음부터 끝까지 재현합니다.</p></div><div class="card"><h3>블루팀: 탐지와 대응</h3><p>관제(SOC), 경보 분석, 차단과 복구를 맡습니다. AI SOC와 SOAR가 블루팀의 도구입니다.</p></div><div class="card"><h3>퍼플팀: 공유와 개선</h3><p>공격 방법을 숨기지 않고 공유해, 방어가 바로 배우게 합니다.</p></div><div class="card"><h3>상시 검증</h3><p>한 번의 훈련이 아니라, 바뀐 환경에서 방어가 계속 통하는지 주기적으로 확인합니다.</p></div></div>
+</div></section>
+<section class="section faq"><div class="wrap">
+  <h2>자주 헷갈리는 질문</h2>
+  <details><summary>모의해킹(침투 테스트)과 레드팀은 무엇이 다른가요?</summary><div><p>모의해킹은 정해진 시스템의 취약점을 최대한 많이 찾는 데 집중합니다. 레드팀은 "고객 데이터를 빼낼 수 있는가" 같은 목표를 정하고, 탐지를 피하며 끝까지 가 보면서 블루팀의 대응 능력까지 시험합니다.</p></div></details><details><summary>레드팀의 공격은 불법이 아닌가요?</summary><div><p>회사의 서면 승인과 정해진 범위 안에서만 하는 훈련이라 합법입니다. 승인 없이 남의 시스템을 공격하는 것은 목적과 상관없이 불법입니다.</p></div></details><details><summary>퍼플팀은 별도의 팀인가요?</summary><div><p>꼭 그렇지는 않습니다. 레드팀과 블루팀이 함께 일하는 방식을 부르는 이름인 경우가 많습니다. 작은 조직에서는 외부 레드팀과 내부 운영 담당자가 함께 복기하는 것으로 시작합니다.</p></div></details><details><summary>작은 회사도 할 수 있나요?</summary><div><p>전담 팀이 없어도 범위를 좁혀 시작할 수 있습니다. 예를 들어 "피싱 메일 한 통으로 어디까지 갈 수 있나"를 시험하고, 결과를 운영 담당자와 함께 고치는 것부터 해 볼 수 있습니다.</p></div></details><details><summary>이 사이트의 다른 기술과는 어떻게 연결되나요?</summary><div><p>ZTNA와 SSE는 블루팀이 쓰는 "막는 장치"이고, AI SOC와 SOAR는 "알아채고 대응하는 장치"입니다. 레드팀은 이 장치들이 실제로 통하는지 시험하는 역할입니다.</p></div></details>
+</div></section>
+<section class="section"><div class="wrap"><div class="cta">
+  <h2>이 기술을 우리 환경에 어떻게 적용할지 궁금하다면</h2>
+  <p>궁금한 점이나 함께 이야기하고 싶은 주제가 있다면 이메일로 보내 주세요.</p>
+  <div class="btn-row"><a class="btn primary" data-mail href="/#contact">admin [at] ztna.co.kr</a><button class="btn" type="button" data-copy-mail hidden>주소 복사</button></div>
+</div></div></section>
+<section class="section"><div class="wrap"><a class="card" href="/ztna_demo.html"><span class="tag">통합 관제 체험</span><h3>네 기술이 한 화면에서 이어지는 모습 보기</h3><p>가상의 정보 유출 시도 하나를 SSE, ZTNA, AI SOC, SOAR가 차례로 막아 내는 과정을 보안 관제 화면 위에서 따라가 봅니다.</p><span class="more">관제 화면 열기 →</span></a><div style="height:16px"></div><div class="pager"><a class="btn" href="/ai-soc/">← AI SOC</a></div></div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>문의: <a data-mail href="/#contact">admin [at] ztna.co.kr</a></p>
+    <p>이 사이트에 게시된 전자우편주소를 자동 수집 프로그램 등으로 무단 수집하는 것을 거부합니다. 위반 시 정보통신망법 제50조의2에 따라 처벌될 수 있습니다.</p>
+    <p>이 사이트의 데모는 모두 가상 데이터로 만든 시뮬레이션이며 실제 제품이나 서비스의 성능을 나타내지 않습니다.</p>
+  </div>
+</footer>
+<script src="/assets/js/contact.js" defer></script>
+<script src="/assets/js/redblue-demo.js" defer></script>
+</body>
+</html>
