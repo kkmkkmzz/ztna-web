@@ -47,7 +47,21 @@
   <h2>어떻게 동작하나요</h2>
   <ol class="steps"><li><strong>가까운 검문소로</strong>기기의 에이전트나 설정이 트래픽을 가장 가까운 클라우드 검문소로 보냅니다.</li><li><strong>목적지 구분</strong>인터넷 사이트인지, 클라우드 앱인지, 사내 앱인지 구분합니다.</li><li><strong>종류별 검사</strong>인터넷은 SWG, 클라우드 앱은 CASB, 사내 앱은 ZTNA가 검사합니다.</li><li><strong>같은 정책 적용</strong>어디로 가든 같은 기준으로 허용, 경고, 차단합니다.</li><li><strong>기록 한곳에</strong>모든 기록이 한곳에 모여 보안 운영팀이 볼 수 있습니다.</li></ol>
 </div></section>
-<section class="section"><div class="wrap"><div class="card"><span class="tag">데모 준비 중</span><p>SSE 데모(트래픽이 SWG·CASB·ZTNA를 거쳐 가는 경로와 민감 정보 업로드 차단)는 다음 단계에서 추가합니다.</p></div></div></section>
+<section class="section" id="demo"><div class="wrap">
+  <h2>직접 해 보기: 트래픽은 어디를 거쳐 갈까</h2>
+  <p>직원이 하는 행동을 하나 골라 보세요. SSE가 목적지에 따라 어떤 검사를 거치게 하는지 보여 줍니다.</p>
+  <div class="demo" id="sse-demo">
+    <span class="sim-badge">시뮬레이션: 가상의 상황과 데이터로 만든 예시이며, 실제 제품의 정책이나 성능이 아닙니다.</span>
+    <div class="demo-picks" role="group" aria-label="직원의 행동 고르기">
+      <button class="btn" type="button" data-sse="web" aria-pressed="true">뉴스 사이트 접속</button>
+      <button class="btn" type="button" data-sse="phish" aria-pressed="false">메일 속 가짜 로그인 링크 클릭</button>
+      <button class="btn" type="button" data-sse="upload" aria-pressed="false">개인 클라우드에 고객 명단 업로드</button>
+      <button class="btn" type="button" data-sse="app" aria-pressed="false">사내 인사 시스템 접속</button>
+    </div>
+    <div class="demo-out" id="sse-out" aria-live="polite"></div>
+    <noscript><p class="note">이 데모는 자바스크립트가 필요합니다. 위의 동작 단계 설명으로도 같은 내용을 읽을 수 있습니다.</p></noscript>
+  </div>
+</div></section>
 <section class="section"><div class="wrap">
   <h2>핵심 기능</h2>
   <div class="grid two"><div class="card"><h3>SWG (웹 접속 검사)</h3><p>악성 사이트나 업무와 무관한 위험 사이트 접속을 막습니다.</p></div><div class="card"><h3>CASB (클라우드 앱 통제)</h3><p>어떤 클라우드 앱을 누가 쓰는지 보고, 위험한 사용을 제한합니다.</p></div><div class="card"><h3>ZTNA (사내 앱 접근)</h3><p>확인된 사람과 기기만 필요한 사내 앱에 연결합니다.</p></div><div class="card"><h3>DLP (정보 유출 방지)</h3><p>주민등록번호 같은 민감 정보가 밖으로 나가는 것을 감지합니다.</p></div></div>
@@ -71,6 +85,6 @@
   </div>
 </footer>
 <script src="/assets/js/contact.js" defer></script>
-
+<script src="/assets/js/sse-demo.js" defer></script>
 </body>
 </html>

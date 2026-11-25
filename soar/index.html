@@ -47,7 +47,17 @@
   <h2>어떻게 동작하나요</h2>
   <ol class="steps"><li><strong>경보 접수</strong>예: "평소와 다른 나라에서 로그인 시도" 경보가 들어옵니다.</li><li><strong>정보 자동 수집</strong>접속한 IP의 평판, 사용자 정보, 기기 상태를 자동으로 조회합니다.</li><li><strong>규칙으로 판단</strong>미리 정한 규칙에 따라 위험도가 높은지 낮은지 나눕니다.</li><li><strong>사람 승인</strong>계정 잠금처럼 업무에 영향이 큰 조치는 담당자가 승인합니다.</li><li><strong>조치와 기록</strong>승인된 조치를 실행하고, 처리 내역을 티켓으로 남깁니다.</li></ol>
 </div></section>
-<section class="section"><div class="wrap"><div class="card"><span class="tag">데모 준비 중</span><p>SOAR 데모(경보 하나가 플레이북 단계를 따라가고, 사람 승인에서 멈추는 재생)는 다음 단계에서 추가합니다.</p></div></div></section>
+<section class="section" id="demo"><div class="wrap">
+  <h2>직접 해 보기: 경보 하나가 처리되는 과정</h2>
+  <p>"다음 단계"를 눌러 플레이북을 한 단계씩 진행해 보세요. 4단계에서는 여러분이 담당자로서 승인 여부를 정합니다.</p>
+  <div class="demo" id="soar-demo">
+    <span class="sim-badge">시뮬레이션: 가상의 경보와 사용자로 만든 예시이며, 실제 제품의 동작이나 성능이 아닙니다.</span>
+    <ol class="playbook" id="soar-steps"></ol>
+    <div class="btn-row" id="soar-ctrl" style="margin-top:0"></div>
+    <p class="sr-only" id="soar-live" aria-live="polite"></p>
+    <noscript><p class="note">이 데모는 자바스크립트가 필요합니다. 위의 동작 단계 설명으로도 같은 내용을 읽을 수 있습니다.</p></noscript>
+  </div>
+</div></section>
 <section class="section"><div class="wrap">
   <h2>핵심 기능</h2>
   <div class="grid two"><div class="card"><h3>플레이북</h3><p>경보 종류별로 무엇을 어떤 순서로 할지 적어 둔 절차서입니다.</p></div><div class="card"><h3>시스템 연동</h3><p>계정 관리, 방화벽, 메일 등 여러 시스템에 명령을 보냅니다.</p></div><div class="card"><h3>사례 관리</h3><p>한 사건에 관련된 경보와 조치를 한곳에 모아 관리합니다.</p></div><div class="card"><h3>승인 단계와 기록</h3><p>자동으로 할 일과 사람이 결정할 일을 나누고 모든 과정을 남깁니다.</p></div></div>
@@ -71,6 +81,6 @@
   </div>
 </footer>
 <script src="/assets/js/contact.js" defer></script>
-
+<script src="/assets/js/soar-demo.js" defer></script>
 </body>
 </html>
