@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#070B1A" />
-  <meta name="description" content="ZTNA 관리자 콘솔 예시 화면 (가상 데이터)." />
+  <meta name="description" content="ZTNA, SSE, AI SOC, SOAR가 한 화면에서 어떻게 이어지는지 가상 사건 하나로 따라가 보는 통합 보안 관제 화면 시뮬레이션." />
   <link rel="canonical" href="https://ztna.co.kr/ztna_demo.html" />
-  <title>ZTNA Admin Console</title>
+  <title>통합 보안 관제 화면 체험 (시뮬레이션) | ztna.co.kr</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -1371,12 +1372,59 @@
         scroll-behavior: auto !important;
       }
     }
+  
+    .sim-top { position: sticky; top: 0; z-index: 1000; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 8px 16px; background: #0B1224; border-bottom: 1px solid rgba(251,191,36,.45); font: 600 14px/1.5 "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; color: #F1F5F9; }
+    .sim-top a { color: #38BDF8; text-decoration: none; }
+    .sim-label { color: #FBBF24; flex: 1 1 260px; }
+    .sim-contact { margin-left: auto; white-space: nowrap; }
+    .sim-contact a { color: #F1F5F9; }
+    .sim-copy, .tour button { font: inherit; font-size: 13px; font-weight: 700; border: 0; border-radius: 8px; padding: 6px 12px; cursor: pointer; background: #38BDF8; color: #00111f; min-height: 36px; }
+    .guide { grid-column: 1 / -1; margin: 0; padding: 20px; border-radius: 26px; border: 1px solid rgba(148,163,184,.16); background: rgba(15,23,42,.72); }
+    .guide h2 { margin: 0 0 14px; font-size: 22px; }
+    .guide-grid { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
+    .guide-item { display: block; padding: 14px; border-radius: 16px; border: 1px solid rgba(148,163,184,.16); background: rgba(2,6,23,.5); color: #CBD5E1; text-decoration: none; font-size: 14px; line-height: 1.6; }
+    .guide-item b { display: block; color: #38BDF8; font-size: 17px; margin-bottom: 4px; }
+    .guide-item:hover { border-color: #38BDF8; }
+    .explain { margin: 8px 0 0; font-size: 13px; color: #FBBF24; line-height: 1.5; }
+    .explain a { color: #38BDF8; }
+    .topbar { position: relative !important; top: auto !important; }
+    .card, .guide, .topbar { scroll-margin-top: 96px; }
+    .tour-focus { outline: 3px solid #FBBF24 !important; outline-offset: 4px; }
+    .tour { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1001; padding: 12px; }
+    .tour[hidden] { display: none; }
+    .tour-inner { max-width: 720px; margin: 0 auto; background: #0B1224; border: 1px solid #FBBF24; border-radius: 18px; padding: 14px 16px; box-shadow: 0 -10px 40px rgba(0,0,0,.6); font-family: "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    .tour-step { margin: 0 0 4px; font-size: 13px; font-weight: 700; color: #FBBF24; }
+    .tour-text { margin: 0 0 10px; font-size: 16px; line-height: 1.6; color: #F1F5F9; }
+    .tour-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .tour-btns button:not(.primary) { background: #1E293B; color: #F1F5F9; }
+    .tour-btns a { color: #38BDF8; font-size: 14px; font-weight: 700; margin-right: auto; padding: 6px 4px; }
+    .tour button:disabled { opacity: .4; cursor: default; }
+    body.touring { padding-bottom: 220px; }
+    @media (max-width: 1180px) {
+      .sidebar { padding: 12px !important; min-height: 0 !important; }
+      .nav-list { display: flex !important; overflow-x: auto; gap: 6px; scrollbar-width: none; }
+      .nav-list::-webkit-scrollbar { display: none; }
+      .nav-item { flex: 0 0 auto; white-space: nowrap; width: auto !important; }
+      .guide-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .guide-grid { grid-template-columns: 1fr; }
+      .hero-copy h2 { font-size: 28px !important; }
+      .page-title h1 { font-size: 24px !important; }
+      .summary-stack, .signal-list { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+      .summary-card, .signal-card { padding: 10px !important; min-height: 0 !important; }
+      .summary-card strong { font-size: 22px !important; }
+      .summary-card span, .signal-card p { font-size: 11px !important; }
+      .signal-card b { font-size: 13px !important; }
+      .sim-label { flex-basis: 100%; order: 3; font-size: 13px; }
+    }
   </style>
 </head>
 <body>
-  <div style="position:relative;z-index:1000;background:#1E293B;color:#F1F5F9;font:600 14px/1.6 -apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;padding:10px 16px;text-align:center;border-bottom:1px solid rgba(251,191,36,.5)">
-    이 화면은 가상 데이터로 만든 관리자 콘솔 예시이며, 표시된 수치는 실제 제품의 성능이 아닙니다.
-    <a href="/ztna/" style="color:#38BDF8">새 ZTNA 설명과 직접 해 보는 데모 보기</a>
+  <div class="sim-top">
+    <a class="sim-home" href="/">← ztna.co.kr</a>
+    <span class="sim-label">시뮬레이션: 가상 데이터로 만든 관제 화면이며, 모든 수치는 예시입니다.</span>
+    <span class="sim-contact">문의 <a data-mail href="/#contact">admin [at] ztna.co.kr</a> <button type="button" class="sim-copy" data-copy-mail hidden>복사</button></span>
   </div>
   <div class="orb one" aria-hidden="true"></div>
   <div class="orb two" aria-hidden="true"></div>
@@ -1387,43 +1435,43 @@
       <div class="brand">
         <span class="brand-mark" aria-hidden="true"></span>
         <span class="brand-text">
-          <strong>ZTNA Console</strong>
-      <span>Admin Console</span>
+          <strong>통합 관제 체험</strong>
+      <span>가상 데이터</span>
         </span>
       </div>
 
       <nav class="nav-list" aria-label="관리자 메뉴">
-        <a class="nav-item active inert-link" href="#overview">
+        <a class="nav-item active" href="#overview">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-11h6V4h-6v5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
-          Overview
+          현황 요약
         </a>
-        <a class="nav-item inert-link" href="#identity">
+        <a class="nav-item" href="#guide">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          Identity
+          기술별 해설
         </a>
-        <a class="nav-item inert-link" href="#device">
+        <a class="nav-item" href="#capability">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/><path d="M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          Device
+          보안 역량
         </a>
-        <a class="nav-item inert-link" href="#policy">
+        <a class="nav-item" href="#policy">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" stroke="currentColor" stroke-width="1.8"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          Policy
+          접근 판단 (ZTNA)
         </a>
-        <a class="nav-item inert-link" href="#apps">
+        <a class="nav-item" href="#flowcard">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          Private Apps
+          제어 흐름
         </a>
-        <a class="nav-item inert-link" href="#analytics">
+        <a class="nav-item" href="#analytics">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          Analytics
+          위험 추이 (AI SOC)
         </a>
-        <a class="nav-item inert-link" href="#soar">
+        <a class="nav-item" href="#soar">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 14.9-4M20 12a8 8 0 0 1-14.9 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 4v4h-4M5 20v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          SOAR
+          자동 대응 (SOAR)
         </a>
-        <a class="nav-item inert-link" href="#settings">
+        <a class="nav-item" href="/sse/">
           <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.64V21a2 2 0 1 1-4 0v-.09a1.8 1.8 0 0 0-1-1.64 1.8 1.8 0 0 0-2 .36l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.64-1H3a2 2 0 1 1 0-4h.09a1.8 1.8 0 0 0 1.64-1 1.8 1.8 0 0 0-.36-2l-.06-.06A2 2 0 1 1 7.14 3.9l.06.06a1.8 1.8 0 0 0 2 .36h.01A1.8 1.8 0 0 0 10.2 2.7V2a2 2 0 1 1 4 0v.09a1.8 1.8 0 0 0 1 1.64 1.8 1.8 0 0 0 2-.36l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.8 1.8 0 0 0-.36 2 1.8 1.8 0 0 0 1.64 1H21a2 2 0 1 1 0 4h-.09A1.8 1.8 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/></svg></span>
-          Settings
+          SSE 알아보기
         </a>
       </nav>
 
@@ -1432,13 +1480,13 @@
     <main class="main" id="overview">
       <header class="topbar">
         <div class="page-title">
-          <span><i class="pulse-dot" aria-hidden="true"></i> Continuous Verification</span>
-          <h1>Zero Trust Access Command Center</h1>
+          <span><i class="pulse-dot" aria-hidden="true"></i> 네 기술이 만나는 곳</span>
+          <h1>통합 보안 관제 화면 체험</h1>
         </div>
         <div class="top-actions">
-          <span class="chip">Tenant: KR-SEC-01</span>
-          <span class="chip">Mode: Read Only</span>
-          <a class="btn primary home-link" href="./index.html">Home</a>
+          <span class="chip">가상 회사</span>
+          <span class="chip">읽기 전용 예시</span>
+          <button class="btn primary" type="button" id="tour-start">사건 하나 따라가기 ▶</button>
         </div>
       </header>
 
@@ -1446,10 +1494,10 @@
         <div class="hero-copy">
           <div>
             <span class="eyebrow"><i class="pulse-dot" aria-hidden="true"></i> Command Center</span>
-            <h2 id="console-heading"><span class="gradient-text">보안 접근 현황</span><br />Live Command View</h2>
+            <h2 id="console-heading"><span class="gradient-text">보안 관제 화면은</span><br />이렇게 생겼습니다</h2>
           </div>
           <p>
-            사용자, 단말, 앱, 데이터 흐름을 하나의 운영 뷰로 확인합니다.
+            보안 운영팀은 ZTNA, SSE, AI SOC, SOAR가 남긴 기록을 이런 화면 하나에서 봅니다. 위의 "사건 하나 따라가기"를 누르면 가상의 정보 유출 시도 하나가 네 기술을 차례로 거쳐 가는 과정을 볼 수 있습니다.
           </p>
         </div>
 
@@ -1475,7 +1523,7 @@
           <div class="traffic-canvas-card">
             <div class="traffic-head">
               <span><b>Access Flow Summary</b><span>사용자와 앱 사이의 보호된 접근 흐름</span></span>
-              <span class="chip">9.8k requests</span>
+              <span class="chip">예시 흐름</span>
             </div>
             <div class="traffic-wrap">
               <canvas id="commandFlow" aria-label="접근 흐름 요약 차트"></canvas>
@@ -1499,14 +1547,24 @@
         </div>
       </section>
 
-      <section class="dashboard-grid" aria-label="ZTNA 관리자 대시보드">
+      <section class="guide" id="guide" aria-labelledby="guide-heading">
+        <h2 id="guide-heading">이 화면에서 각 기술이 맡은 칸</h2>
+        <div class="guide-grid">
+          <a href="/ztna/" class="guide-item"><b>ZTNA</b><span>"접근 정책 판단" 표: 누가 어떤 기기로 어느 앱에 들어가려 했고, 허용·추가 인증·차단 중 무엇으로 판단했는지</span></a>
+          <a href="/sse/" class="guide-item"><b>SSE</b><span>"보안 역량"의 데이터 항목과 "대응 대기": 웹·클라우드 앱·사내 앱으로 나가는 트래픽을 검사한 결과</span></a>
+          <a href="/ai-soc/" class="guide-item"><b>AI SOC</b><span>"위험 점수 추이": 여러 신호를 묶어 위험을 매기고 무엇이 의심스러운지 정리</span></a>
+          <a href="/soar/" class="guide-item"><b>SOAR</b><span>"자동 대응" 피드: 승인된 플레이북이 세션 차단, 토큰 폐기, 티켓 생성을 실행한 기록</span></a>
+        </div>
+      </section>
+
+      <section class="dashboard-grid" aria-label="통합 관제 대시보드 예시">
         <article class="card kpi">
           <div class="card-header">
             <div>
               <span class="card-kicker">접근 판단</span>
               <h3>허용 세션</h3>
             </div>
-            <span class="score allow">+12%</span>
+            <span class="score allow">예시</span>
           </div>
           <div class="kpi-value">8,420<small>today</small></div>
           <div class="sparkline" aria-hidden="true">
@@ -1562,6 +1620,7 @@
           <span class="card-kicker">지속 모니터링</span>
               <h3>위험 점수 추이</h3>
               <p class="card-sub">사용자, 단말, 앱, 위치 신호 기반</p>
+              <p class="explain">AI SOC가 여러 신호를 묶어 보는 방식입니다. <a href="/ai-soc/">자세히</a></p>
             </div>
             <span class="chip">Last 12h</span>
           </div>
@@ -1593,6 +1652,7 @@
               <span class="card-kicker">최소 권한 매트릭스</span>
               <h3>접근 정책 판단</h3>
               <p class="card-sub">주체, 단말, 리소스, 위험도 기반 판단</p>
+              <p class="explain">ZTNA가 하는 일입니다. <a href="/ztna/">자세히</a></p>
             </div>
             <button class="btn inert-action" type="button">새로고침</button>
           </div>
@@ -1641,6 +1701,7 @@
               <span class="card-kicker">SIEM / SOAR 피드</span>
               <h3>자동 대응</h3>
               <p class="card-sub">로그 상관분석, 플레이북 실행, 대응 추적</p>
+              <p class="explain">SOAR가 하는 일입니다. <a href="/soar/">자세히</a></p>
             </div>
           </div>
           <div class="event-feed">
@@ -1667,7 +1728,7 @@
           </div>
         </article>
 
-        <article class="card policy-card">
+        <article class="card policy-card" id="flowcard">
           <div class="card-header">
             <div>
               <span class="card-kicker">정책 결정 흐름</span>
@@ -1685,12 +1746,13 @@
           </div>
         </article>
 
-        <article class="card control-card">
+        <article class="card control-card" id="capability">
           <div class="card-header">
             <div>
               <span class="card-kicker">운영 성숙도</span>
               <h3>보안 역량</h3>
               <p class="card-sub">제어 상태, 운영 신호, 개선 우선순위</p>
+              <p class="explain">데이터 항목은 SSE의 정보 유출 방지(DLP)와 연결됩니다. 백분율은 모두 예시입니다. <a href="/sse/">자세히</a></p>
             </div>
           </div>
           <div class="control-grid">
@@ -1729,20 +1791,31 @@
       </section>
 
       <p class="footer-note">
-        <span>This static console view does not perform authentication, policy changes, network calls, or administrative actions.</span>
+        <span>이 화면은 정적 예시입니다. 실제 인증, 정책 변경, 네트워크 요청, 관리 작업을 하지 않으며 모든 수치와 이름은 가상입니다.</span>
         <span class="footer-credit">Made by Kwang-Mo Kim</span>
       </p>
     </main>
+  </div>
+  <div class="tour" id="tour" hidden role="region" aria-label="사건 따라가기 안내">
+    <div class="tour-inner">
+      <p class="tour-step" id="tour-step"></p>
+      <p class="tour-text" id="tour-text" aria-live="polite"></p>
+      <div class="tour-btns">
+        <a id="tour-more" href="/">자세히</a>
+        <button type="button" id="tour-prev">이전</button>
+        <button type="button" id="tour-next" class="primary">다음</button>
+        <button type="button" id="tour-close">닫기</button>
+      </div>
+    </div>
   </div>
 
   <script>
     (() => {
       'use strict';
 
-      document.querySelectorAll('a, button').forEach((el) => {
+      document.querySelectorAll('.inert-action, .nav-item').forEach((el) => {
         el.addEventListener('click', (event) => {
-          if (el.classList.contains('home-link')) return;
-          event.preventDefault();
+          if (el.classList.contains('inert-action')) event.preventDefault();
           document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
           if (el.classList.contains('nav-item')) el.classList.add('active');
         });
@@ -1985,5 +2058,7 @@
       }, { passive: true });
     })();
   </script>
+<script src="/assets/js/contact.js" defer></script>
+<script src="/assets/js/console-tour.js" defer></script>
 </body>
 </html>
