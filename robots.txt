@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ztna.co.kr/sitemap.xml
